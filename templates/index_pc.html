@@ -1,0 +1,396 @@
+{% extends "base.html" %}
+
+{% block extra_head %}
+<style>
+    .hero-section {
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        color: white;
+        padding: 6rem 0;
+        position: relative;
+        overflow: hidden;
+    }
+    .hero-pattern {
+        position: absolute;
+        top: 0; right: 0; bottom: 0; left: 0;
+        background-image: radial-gradient(#334155 1px, transparent 1px);
+        background-size: 30px 30px;
+        opacity: 0.1;
+    }
+
+    .project-card, .pricing-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border: 1px solid #e2e8f0;
+    }
+    .project-card:hover, .pricing-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px -10px rgba(0,0,0,0.1);
+        border-color: var(--accent);
+    }
+
+    .popular-badge {
+        background: var(--accent);
+        color: white;
+        font-size: 0.75rem;
+        font-weight: 700;
+        padding: 4px 12px;
+        border-radius: 20px;
+        position: absolute;
+        top: -12px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .calc-box {
+        background: white;
+        border-radius: 12px;
+        padding: 2rem;
+        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+    }
+    .calc-total {
+        font-size: 2rem;
+        font-weight: 800;
+        color: var(--accent);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-3">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+</div>
+
+<section class="hero-section">
+    <div class="hero-pattern"></div>
+    <div class="container position-relative z-1">
+        <div class="row align-items-center">
+            <div class="col-lg-7">
+                <span class="badge bg-warning text-dark fw-bold mb-3">
+                    <i class="fa-solid fa-code me-1"></i>
+                    {% if lang == 'en' %}MADE WITH PYTHON{% else %}Python 技术驱动{% endif %}
+                </span>
+
+                <h1 class="display-4 fw-bold mb-3 lh-tight">
+                    {% if lang == 'en' %}
+                        Turn Global Traffic into <span class="text-accent">Export Orders</span>
+                    {% else %}
+                        把全球流量转化为<span class="text-accent">真实外贸订单</span>
+                    {% endif %}
+                </h1>
+
+                <p class="lead text-light opacity-75 mb-4" style="max-width: 600px;">
+                    {% if lang == 'en' %}
+                        We build high-speed, SEO-friendly websites for Chinese factories and traders.
+                        Stop losing clients because of slow, outdated websites.
+                    {% else %}
+                        我们为工厂和外贸公司搭建高速、稳定、适合谷歌优化的官网，
+                        帮助您告别又慢又旧的网页，提升客户咨询数量。
+                    {% endif %}
+                </p>
+
+                <div class="d-flex gap-3">
+                    <a href="#calculator" class="btn btn-warning fw-bold px-4 py-2">
+                        {% if lang == 'en' %}Get a Price Quote{% else %}获取报价{% endif %}
+                    </a>
+                    <a href="#portfolio" class="btn btn-outline-light px-4 py-2">
+                        {% if lang == 'en' %}See Examples{% else %}查看案例{% endif %}
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-lg-5 d-none d-lg-block">
+                <div class="p-4 bg-white bg-opacity-10 rounded-4 border border-white border-opacity-25 shadow-lg">
+                    <h5 class="fw-bold mb-3">
+                        <i class="fa-solid fa-check-circle text-success me-2"></i>
+                        {% if lang == 'en' %}
+                            Why Python?
+                        {% else %}
+                            为什么选择 Python 建站？
+                        {% endif %}
+                    </h5>
+                    <ul class="list-unstyled mb-0 d-grid gap-2">
+                        <li class="d-flex align-items-center">
+                            <i class="fa-solid fa-bolt text-warning me-3" style="width:20px"></i>
+                            {% if lang == 'en' %}
+                                2x Faster than WordPress
+                            {% else %}
+                                访问速度可比传统 WordPress 快 2 倍
+                            {% endif %}
+                        </li>
+                        <li class="d-flex align-items-center">
+                            <i class="fa-solid fa-shield-halved text-warning me-3" style="width:20px"></i>
+                            {% if lang == 'en' %}
+                                More Secure (No Plugins)
+                            {% else %}
+                                更安全，几乎不依赖第三方插件
+                            {% endif %}
+                        </li>
+                        <li class="d-flex align-items-center">
+                            <i class="fa-brands fa-google text-warning me-3" style="width:20px"></i>
+                            {% if lang == 'en' %}
+                                Better for Google SEO
+                            {% else %}
+                                更利于谷歌 SEO 排名
+                            {% endif %}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="portfolio" class="py-5">
+    <div class="container py-4">
+        <div class="text-center mb-5">
+            <span class="section-label">
+                {% if lang == 'en' %}Our Work{% else %}案例展示{% endif %}
+            </span>
+            <h2 class="fw-bold display-6">
+                {% if lang == 'en' %}Demo Projects{% else %}演示项目{% endif %}
+            </h2>
+            <p class="text-muted">
+                {% if lang == 'en' %}
+                    These demos run on local ports (5001–5004). They show what we can build for you.
+                {% else %}
+                    以下为本地运行的演示站点（端口 5001–5004），展示我们可以为您搭建的网站类型。
+                {% endif %}
+            </p>
+        </div>
+
+        <div class="row g-4">
+            {% for project in projects %}
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 project-card border-0 bg-white">
+                    <div class="card-body">
+                        <div class="mb-3 text-accent fs-2">
+                            <i class="fa-solid {{ project.icon }}"></i>
+                        </div>
+                        <h5 class="fw-bold">
+                            {{ project.title }}
+                        </h5>
+                        <span class="badge bg-light text-dark mb-2 border">
+                            {{ project.category }}
+                        </span>
+                        <p class="small text-muted mb-4">{{ project.desc }}</p>
+                        <a href="{{ project.url }}" target="_blank" class="btn btn-outline-dark btn-sm w-100 stretched-link">
+                            {% if lang == 'en' %}
+                                View Demo <i class="fa-solid fa-arrow-up-right-from-square ms-1"></i>
+                            {% else %}
+                                打开演示站点 <i class="fa-solid fa-arrow-up-right-from-square ms-1"></i>
+                            {% endif %}
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section id="pricing" class="py-5 bg-light-subtle">
+    <div class="container py-4">
+        <div class="text-center mb-5">
+            <span class="section-label">
+                {% if lang == 'en' %}Investment{% else %}价格区间{% endif %}
+            </span>
+            <h2 class="fw-bold display-6">
+                {% if lang == 'en' %}Simple, Transparent Pricing{% else %}简单透明的建站报价{% endif %}
+            </h2>
+        </div>
+
+        <div class="row g-4 justify-content-center">
+            {% for pkg in packages %}
+            <div class="col-md-4">
+                <div class="card h-100 pricing-card bg-white position-relative {{ 'border-warning shadow' if pkg.recommended else 'border-0' }}">
+                    {% if pkg.recommended %}
+                    <span class="popular-badge shadow-sm">
+                        {% if lang == 'en' %}MOST POPULAR{% else %}推荐套餐{% endif %}
+                    </span>
+                    {% endif %}
+                    <div class="card-body p-4 d-flex flex-column">
+                        <h5 class="fw-bold text-muted text-uppercase small ls-1 mb-2">
+                            {{ pkg.name }}
+                        </h5>
+                        <h2 class="display-5 fw-bold mb-4">{{ pkg.price }}</h2>
+                        <ul class="list-unstyled mb-4 flex-grow-1">
+                            {% for feature in pkg.features %}
+                            <li class="mb-2 d-flex align-items-start">
+                                <i class="fa-solid fa-check text-success mt-1 me-2"></i>
+                                <span>{{ feature }}</span>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                        <a href="#contact" class="btn {{ 'btn-dark' if pkg.recommended else 'btn-outline-dark' }} w-100">
+                            {% if lang == 'en' %}Choose Plan{% else %}选择此套餐{% endif %}
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section id="calculator" class="py-5">
+    <div class="container py-4">
+        <div class="row g-5">
+            <div class="col-lg-6">
+                <span class="section-label">
+                    {% if lang == 'en' %}Estimate Your Cost{% else %}在线费用估算{% endif %}
+                </span>
+                <h2 class="fw-bold mb-4">
+                    {% if lang == 'en' %}Instant Price Calculator{% else %}即时建站报价计算器{% endif %}
+                </h2>
+                <div class="calc-box">
+                    <form id="priceForm">
+                        <div class="mb-3">
+                            <label class="fw-bold mb-2">
+                                {% if lang == 'en' %}Website Type{% else %}网站类型{% endif %}
+                            </label>
+                            <select class="form-select" id="siteType" onchange="calculatePrice()">
+                                <option value="3500">
+                                    {% if lang == 'en' %}
+                                        Simple Landing Page (¥3,500)
+                                    {% else %}
+                                        简单落地页 (¥3,500)
+                                    {% endif %}
+                                </option>
+                                <option value="6000" selected>
+                                    {% if lang == 'en' %}
+                                        Corporate B2B Site (¥6,000)
+                                    {% else %}
+                                        企业 B2B 官网 (¥6,000)
+                                    {% endif %}
+                                </option>
+                                <option value="12000">
+                                    {% if lang == 'en' %}
+                                        E-Commerce Shop (¥12,000)
+                                    {% else %}
+                                        独立站商城 (¥12,000)
+                                    {% endif %}
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="fw-bold mb-2">
+                                {% if lang == 'en' %}Add-ons{% else %}增值服务{% endif %}
+                            </label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="1500" id="optSEO" onchange="calculatePrice()">
+                                <label class="form-check-label" for="optSEO">
+                                    {% if lang == 'en' %}
+                                        Google SEO Setup (+¥1,500)
+                                    {% else %}
+                                        谷歌 SEO 设置 (+¥1,500)
+                                    {% endif %}
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="2000" id="optCopy" onchange="calculatePrice()">
+                                <label class="form-check-label" for="optCopy">
+                                    {% if lang == 'en' %}
+                                        Professional English Copywriting (+¥2,000)
+                                    {% else %}
+                                        专业英文文案撰写 (+¥2,000)
+                                    {% endif %}
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="1000" id="optChat" onchange="calculatePrice()">
+                                <label class="form-check-label" for="optChat">
+                                    {% if lang == 'en' %}
+                                        Live Chat / WhatsApp Integration (+¥1,000)
+                                    {% else %}
+                                        在线聊天 / WhatsApp 接入 (+¥1,000)
+                                    {% endif %}
+                                </label>
+                            </div>
+                        </div>
+
+                        <hr>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-muted">
+                                {% if lang == 'en' %}Estimated Total:{% else %}预估总价：{% endif %}
+                            </span>
+                            <span class="calc-total">¥<span id="totalPrice">6,000</span></span>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="col-lg-6" id="contact">
+                <span class="section-label">
+                    {% if lang == 'en' %}Get Started{% else %}开始合作{% endif %}
+                </span>
+                <h2 class="fw-bold mb-4">
+                    {% if lang == 'en' %}Let's Discuss Your Project{% else %}请简单介绍您的项目{% endif %}
+                </h2>
+                <form action="{{ url_for('contact_submit') }}" method="post" class="bg-white p-4 rounded-4 shadow-sm border">
+                    <input type="hidden" name="lang" value="{{ lang }}">
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">
+                            {% if lang == 'en' %}Your Name{% else %}您的姓名{% endif %}
+                        </label>
+                        <input type="text" name="name" class="form-control" placeholder="{% if lang == 'en' %}John Doe{% else %}张先生 / 李女士{% endif %}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">
+                            {% if lang == 'en' %}Company / Website{% else %}公司名称 / 网站{% endif %}
+                        </label>
+                        <input type="text" name="company" class="form-control" placeholder="{% if lang == 'en' %}Ningbo Tools Co.{% else %}例如：宁波某某工具有限公司{% endif %}">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">
+                            {% if lang == 'en' %}Project Details{% else %}项目简要说明{% endif %}
+                        </label>
+                        <textarea name="message" class="form-control" rows="4" placeholder="{% if lang == 'en' %}I am interested in the B2B package...{% else %}例如：需要一个英文官网，主要展示产品并收集客户询盘...{% endif %}"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-dark w-100 py-2 fw-bold">
+                        {% if lang == 'en' %}Send Inquiry{% else %}提交需求{% endif %}
+                    </button>
+
+                    <div class="mt-4 pt-3 border-top text-center">
+                        <p class="small text-muted mb-2">
+                            {% if lang == 'en' %}
+                                Or add me directly on WeChat:
+                            {% else %}
+                                您也可以直接添加微信联系：
+                            {% endif %}
+                        </p>
+                        <img src="{{ url_for('static', filename='img/agency_wechat_qr.png') }}"
+                             onerror="this.src='https://placehold.co/100x100?text=QR+Code'"
+                             style="width: 100px; height: 100px; border-radius: 8px;">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function calculatePrice() {
+        let base = parseInt(document.getElementById('siteType').value);
+        let total = base;
+
+        if (document.getElementById('optSEO').checked) total += parseInt(document.getElementById('optSEO').value);
+        if (document.getElementById('optCopy').checked) total += parseInt(document.getElementById('optCopy').value);
+        if (document.getElementById('optChat').checked) total += parseInt(document.getElementById('optChat').value);
+
+        document.getElementById('totalPrice').innerText = total.toLocaleString();
+    }
+</script>
+{% endblock %}

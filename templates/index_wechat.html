@@ -1,0 +1,390 @@
+{% extends "base.html" %}
+{% block title %}SkyLane AI Studio · 天航智网工作室{% endblock %}
+
+{% block extra_head %}
+<style>
+    :root {
+        --wx-bg: #f5f7fa;
+        --wx-primary: #4f46e5;
+        --wx-accent: #f59e0b;
+        --wx-dark: #1e293b;
+    }
+
+    body {
+        background-color: var(--wx-bg);
+        font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+        padding-bottom: 60px;
+    }
+
+    .wx-hero {
+        background: linear-gradient(135deg, #0f172a 0%, #312e81 100%);
+        color: white;
+        padding: 3rem 1.5rem 6rem 1.5rem;
+        border-bottom-left-radius: 30px;
+        border-bottom-right-radius: 30px;
+        position: relative;
+        overflow: visible;
+        z-index: 1;
+    }
+
+    .wx-hero::before {
+        content: '';
+        position: absolute;
+        top: -50px; right: -50px;
+        width: 200px; height: 200px;
+        background: rgba(255,255,255,0.05);
+        border-radius: 50%;
+    }
+
+    .wx-card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+        border: none;
+        margin-bottom: 1.5rem;
+        overflow: hidden;
+    }
+
+    .wx-card-header {
+        padding: 1rem 1.25rem;
+        border-bottom: 1px solid #f1f5f9;
+        font-weight: 700;
+        color: var(--wx-dark);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .wx-overlap-container {
+        position: relative;
+        z-index: 2;
+        margin-top: -3rem;
+        padding: 0 1rem;
+    }
+
+    .btn-wx-action {
+        background: var(--wx-primary);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        padding: 0.8rem;
+        font-weight: 600;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.3);
+    }
+    .btn-wx-action:active {
+        transform: scale(0.98);
+        background: #4338ca;
+    }
+
+    .project-item {
+        display: flex;
+        align-items: center;
+        padding: 1rem;
+        border-bottom: 1px solid #f8fafc;
+    }
+    .project-item:last-child { border-bottom: none; }
+
+    .project-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 10px;
+        background: #e0e7ff;
+        color: var(--wx-primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        margin-right: 1rem;
+        flex-shrink: 0;
+    }
+
+    .wx-bottom-bar {
+        position: fixed;
+        bottom: 0; left: 0; right: 0;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        padding: 0.8rem 1rem;
+        box-shadow: 0 -4px 6px -1px rgba(0,0,0,0.05);
+        z-index: 1000;
+        display: flex;
+        gap: 1rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="wx-hero">
+    <div class="d-flex align-items-center mb-2">
+        <span class="badge bg-warning text-dark rounded-pill px-3 py-1 fw-bold" style="font-size: 0.7rem;">
+            {% if lang == 'en' %}Python Powered{% else %}Python 技术驱动{% endif %}
+        </span>
+    </div>
+    <h1 class="fw-bold mb-2">
+        {% if lang == 'en' %}
+            Export Website<br>Specialists
+        {% else %}
+            外贸独立站<br>建设专家
+        {% endif %}
+    </h1>
+    <p class="opacity-75 small mb-0" style="max-width: 85%;">
+        {% if lang == 'en' %}
+            We help small manufacturers sell worldwide with clean, fast, bilingual websites.
+        {% else %}
+            We help small producers sell worldwide.<br>
+            无论贵公司使用哪种语言，我们都可以为您搭建稳定可靠的官方网站。
+        {% endif %}
+    </p>
+</div>
+
+<div class="wx-overlap-container">
+
+    <div class="wx-card">
+        <div class="p-3 d-flex justify-content-between align-items-center">
+            <div class="text-center flex-fill">
+                <div class="mb-2 text-primary"><i class="fa-solid fa-code fa-lg"></i></div>
+                <div class="small fw-bold text-dark">
+                    {% if lang == 'en' %}Fast Build{% else %}极速建站{% endif %}
+                </div>
+            </div>
+            <div class="text-center flex-fill border-start border-end">
+                <div class="mb-2 text-primary"><i class="fa-brands fa-google fa-lg"></i></div>
+                <div class="small fw-bold text-dark">
+                    {% if lang == 'en' %}Google SEO{% else %}谷歌SEO{% endif %}
+                </div>
+            </div>
+            <div class="text-center flex-fill">
+                <div class="mb-2 text-primary"><i class="fa-solid fa-mobile-screen fa-lg"></i></div>
+                <div class="small fw-bold text-dark">
+                    {% if lang == 'en' %}Responsive{% else %}手机适配{% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="wx-card">
+        <div class="wx-card-header">
+            <i class="fa-solid fa-layer-group text-warning"></i>
+            <span>
+                {% if lang == 'en' %}Showcase Demos{% else %}产品展示{% endif %}
+            </span>
+        </div>
+        <div class="d-flex flex-column">
+            {% for project in projects %}
+            <div class="project-item">
+                <div class="project-icon">
+                    <i class="fa-solid {{ project.icon }}"></i>
+                </div>
+                <div class="flex-grow-1">
+                    <h6 class="mb-0 fw-bold text-dark" style="font-size: 0.95rem;">{{ project.title }}</h6>
+                    <p class="text-muted small mb-0 text-truncate" style="max-width: 180px;">{{ project.desc }}</p>
+                </div>
+                <a href="{{ project.url }}" class="btn btn-sm btn-light text-primary fw-bold rounded-pill px-3">
+                    {% if lang == 'en' %}View{% else %}预览{% endif %}
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="wx-card">
+        <div class="wx-card-header">
+            <i class="fa-solid fa-tags text-warning"></i>
+            <span>
+                {% if lang == 'en' %}Reference Pricing{% else %}参考报价 (Pricing){% endif %}
+            </span>
+        </div>
+        <div class="p-3">
+            <div class="p-3 bg-light rounded-3 mb-3 border">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span class="fw-bold text-dark">
+                        {% if lang == 'en' %}Basic Export Site{% else %}基础外贸站{% endif %}
+                    </span>
+                    <span class="text-primary fw-bold">¥3,900</span>
+                </div>
+                <ul class="mb-0 small text-muted ps-3">
+                    <li>
+                        {% if lang == 'en' %}
+                            5 pages (Home, About, Products…)
+                        {% else %}
+                            5个页面展示 (Home, About, Products...)
+                        {% endif %}
+                    </li>
+                    <li>
+                        {% if lang == 'en' %}
+                            Mobile responsive layout
+                        {% else %}
+                            手机端自适应 (Mobile Responsive)
+                        {% endif %}
+                    </li>
+                    <li>
+                        {% if lang == 'en' %}
+                            Basic SEO setup
+                        {% else %}
+                            基础SEO设置
+                        {% endif %}
+                    </li>
+                </ul>
+            </div>
+            <div class="p-3 rounded-3 mb-0 border border-primary position-relative" style="background: #eff6ff;">
+                <span class="position-absolute top-0 end-0 badge bg-primary m-2" style="font-size:0.6rem;">
+                    {% if lang == 'en' %}Recommended{% else %}推荐{% endif %}
+                </span>
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span class="fw-bold text-primary">
+                        {% if lang == 'en' %}Professional B2B Site{% else %}专业B2B官网{% endif %}
+                    </span>
+                    <span class="text-primary fw-bold">¥6,800</span>
+                </div>
+                <ul class="mb-0 small text-muted ps-3">
+                    <li>
+                        {% if lang == 'en' %}
+                            10+ pages & product catalog
+                        {% else %}
+                            10+ 页面 & 产品目录系统
+                        {% endif %}
+                    </li>
+                    <li>
+                        {% if lang == 'en' %}
+                            Bilingual CN/EN
+                        {% else %}
+                            双语支持 (CN/EN)
+                        {% endif %}
+                    </li>
+                    <li>
+                        {% if lang == 'en' %}
+                            WhatsApp / inquiry form integration
+                        {% else %}
+                            WhatsApp / 询盘表单集成
+                        {% endif %}
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="wx-card">
+        <div class="wx-card-header">
+            <i class="fa-solid fa-calculator text-warning"></i>
+            <span>
+                {% if lang == 'en' %}Cost Estimator{% else %}费用估算器 (Calculator){% endif %}
+            </span>
+        </div>
+        <div class="p-4">
+            <form id="wxCalcForm">
+                <div class="mb-3">
+                    <label class="small fw-bold text-muted mb-1">
+                        {% if lang == 'en' %}Website Type{% else %}网站类型{% endif %}
+                    </label>
+                    <select class="form-select form-select-sm" id="wxSiteType" onchange="calcWxPrice()">
+                        <option value="3500">
+                            {% if lang == 'en' %}Simple Landing (¥3,500){% else %}简单展示页 (¥3,500){% endif %}
+                        </option>
+                        <option value="6000" selected>
+                            {% if lang == 'en' %}B2B Corporate Site (¥6,000){% else %}企业B2B官网 (¥6,000){% endif %}
+                        </option>
+                        <option value="12000">
+                            {% if lang == 'en' %}E-commerce Store (¥12,000){% else %}独立站商城 (¥12,000){% endif %}
+                        </option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="small fw-bold text-muted mb-1">
+                        {% if lang == 'en' %}Add-ons{% else %}增值服务{% endif %}
+                    </label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="1500" id="wxOptSEO" onchange="calcWxPrice()">
+                        <label class="form-check-label small" for="wxOptSEO">
+                            {% if lang == 'en' %}Google SEO (+¥1,500){% else %}谷歌SEO优化 (+¥1,500){% endif %}
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="2000" id="wxOptCopy" onchange="calcWxPrice()">
+                        <label class="form-check-label small" for="wxOptCopy">
+                            {% if lang == 'en' %}English copywriting (+¥2,000){% else %}英文文案撰写 (+¥2,000){% endif %}
+                        </label>
+                    </div>
+                </div>
+                <hr class="my-3">
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="small fw-bold text-muted">
+                        {% if lang == 'en' %}Estimated total:{% else %}预估总价：{% endif %}
+                    </span>
+                    <span class="h4 fw-bold text-primary mb-0">¥<span id="wxTotalPrice">6,000</span></span>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="wx-card p-3">
+        <h6 class="fw-bold mb-3">
+            {% if lang == 'en' %}Why an independent site?{% else %}为什么选择独立站？{% endif %}
+        </h6>
+        <div class="d-flex gap-3 mb-3">
+            <i class="fa-solid fa-check-circle text-success mt-1"></i>
+            <p class="small text-muted mb-0">
+                {% if lang == 'en' %}No platform price war, talk directly to clients.{% else %}摆脱平台内卷，不再只比价格。{% endif %}
+            </p>
+        </div>
+        <div class="d-flex gap-3 mb-3">
+            <i class="fa-solid fa-check-circle text-success mt-1"></i>
+            <p class="small text-muted mb-0">
+                {% if lang == 'en' %}Build a real brand image.{% else %}树立企业品牌形象。{% endif %}
+            </p>
+        </div>
+        <div class="d-flex gap-3">
+            <i class="fa-solid fa-check-circle text-success mt-1"></i>
+            <p class="small text-muted mb-0">
+                {% if lang == 'en' %}Own your traffic and customer list.{% else %}直接沉淀私域客户资源。{% endif %}
+            </p>
+        </div>
+    </div>
+
+    <div class="wx-card p-4 text-center" id="contact-area">
+        <h6 class="fw-bold mb-3">
+            {% if lang == 'en' %}Contact & WeChat{% else %}联系咨询{% endif %}
+        </h6>
+        <div class="bg-light p-2 rounded-3 d-inline-block mb-2">
+            <img src="{{ url_for('static', filename='img/agency_wechat_qr.png') }}"
+                 onerror="this.src='https://placehold.co/150x150?text=WeChat+QR'"
+                 class="img-fluid" style="width: 140px; height: 140px;">
+        </div>
+        <p class="small text-muted mb-0">
+            {% if lang == 'en' %}
+                Long-press the QR code to add on WeChat and get a quote.
+            {% else %}
+                长按识别二维码，获取报价方案。
+            {% endif %}
+        </p>
+    </div>
+</div>
+
+<div class="wx-bottom-bar">
+    <a href="#contact-area" class="btn btn-light flex-fill text-dark fw-bold border">
+        <i class="fa-regular fa-comments me-1"></i>
+        {% if lang == 'en' %}Chat{% else %}咨询{% endif %}
+    </a>
+    <a href="#contact-area" class="btn btn-wx-action flex-fill">
+        {% if lang == 'en' %}Add WeChat{% else %}添加微信{% endif %}
+    </a>
+</div>
+
+<script>
+    function calcWxPrice() {
+        let base = parseInt(document.getElementById('wxSiteType').value);
+        let total = base;
+
+        if (document.getElementById('wxOptSEO').checked) {
+            total += parseInt(document.getElementById('wxOptSEO').value);
+        }
+        if (document.getElementById('wxOptCopy').checked) {
+            total += parseInt(document.getElementById('wxOptCopy').value);
+        }
+
+        document.getElementById('wxTotalPrice').innerText = total.toLocaleString();
+    }
+</script>
+{% endblock %}
