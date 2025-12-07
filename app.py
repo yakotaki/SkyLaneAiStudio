@@ -10,7 +10,7 @@ PROJECTS = [
         "title": "Factory B2B Export",
         "category": "Manufacturing",
         "desc": "Heavy machinery and tools export site. Focus on technical specs, certifications, and factory tour video.",
-        "url": "http://127.0.0.1:5001/samples/factory",
+        "url": "https://factory.skylaneai.com/",
         "icon": "fa-industry"
     },
     {
