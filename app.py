@@ -35,7 +35,7 @@ PROJECTS = [
             "en": "Professional service site for a trading partner, clearly outlining sourcing steps, QC, and logistics.",
             "zh": "专业的外贸服务型网站，清晰展示采购流程、质量控制以及物流安排。"
         },
-        "url": "http://127.0.0.1:5003/",
+        "url": "https://sourcing.skylaneai.com/",
         "icon": "fa-handshake"
     },
     {
