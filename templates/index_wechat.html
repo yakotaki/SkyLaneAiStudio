@@ -5,7 +5,7 @@
 <style>
     :root {
         --wx-bg: #f5f7fa;
-        --wx-primary: #4f46e5;
+        --wx-xrimary: #4f46e5;
         --wx-accent: #f59e0b;
         --wx-dark: #1e293b;
     }
@@ -113,14 +113,24 @@
         display: flex;
         gap: 1rem;
     }
+
+    /* Small adjustment so Smart RFQ widget looks good in H5 card flow */
+    #smartRfqCard {
+        margin-bottom: 0;
+        box-shadow: none;
+        border-radius: 12px;
+    }
 </style>
 {% endblock %}
 
 {% block content %}
 <div class="wx-hero">
-    <div class="d-flex align-items-center mb-2">
+    <div class="d-flex align-items-center mb-2 gap-2">
         <span class="badge bg-warning text-dark rounded-pill px-3 py-1 fw-bold" style="font-size: 0.7rem;">
             {% if lang == 'en' %}Python Powered{% else %}Python 技术驱动{% endif %}
+        </span>
+        <span class="badge bg-info text-dark rounded-pill px-3 py-1 fw-bold" style="font-size: 0.7rem;">
+            {% if lang == 'en' %}AI Ready{% else %}支持 AI 加持{% endif %}
         </span>
     </div>
     <h1 class="fw-bold mb-2">
@@ -132,16 +142,16 @@
     </h1>
     <p class="opacity-75 small mb-0" style="max-width: 85%;">
         {% if lang == 'en' %}
-            We help small manufacturers sell worldwide with clean, fast, bilingual websites.
+            We build clean, fast, bilingual websites for factories and trading companies — now with optional AI tools for RFQ and online consulting.
         {% else %}
-            We help small producers sell worldwide.<br>
-            无论贵公司使用哪种语言，我们都可以为您搭建稳定可靠的官方网站。
+            专注为工厂和外贸公司搭建中英双语网站，支持接入 AI 询盘助手、智能 RFQ 等增值功能。
         {% endif %}
     </p>
 </div>
 
 <div class="wx-overlap-container">
 
+    <!-- Feature highlights -->
     <div class="wx-card">
         <div class="p-3 d-flex justify-content-between align-items-center">
             <div class="text-center flex-fill">
@@ -157,19 +167,20 @@
                 </div>
             </div>
             <div class="text-center flex-fill">
-                <div class="mb-2 text-primary"><i class="fa-solid fa-mobile-screen fa-lg"></i></div>
+                <div class="mb-2 text-primary"><i class="fa-solid fa-wand-magic-sparkles fa-lg"></i></div>
                 <div class="small fw-bold text-dark">
-                    {% if lang == 'en' %}Responsive{% else %}手机适配{% endif %}
+                    {% if lang == 'en' %}AI Ready{% else %}AI 加值{% endif %}
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Demos -->
     <div class="wx-card">
         <div class="wx-card-header">
             <i class="fa-solid fa-layer-group text-warning"></i>
             <span>
-                {% if lang == 'en' %}Showcase Demos{% else %}产品展示{% endif %}
+                {% if lang == 'en' %}Showcase Demos{% else %}示例网站{% endif %}
             </span>
         </div>
         <div class="d-flex flex-column">
@@ -190,83 +201,154 @@
         </div>
     </div>
 
-    <div class="wx-card">
+    <!-- Packages & Pricing (linked to demos) -->
+    <div class="wx-card" id="pricing">
         <div class="wx-card-header">
             <i class="fa-solid fa-tags text-warning"></i>
             <span>
-                {% if lang == 'en' %}Reference Pricing{% else %}参考报价 (Pricing){% endif %}
+                {% if lang == 'en' %}Packages & Pricing{% else %}网站套餐与报价{% endif %}
             </span>
         </div>
         <div class="p-3">
-            <div class="p-3 bg-light rounded-3 mb-3 border">
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                    <span class="fw-bold text-dark">
-                        {% if lang == 'en' %}Basic Export Site{% else %}基础外贸站{% endif %}
-                    </span>
-                    <span class="text-primary fw-bold">¥3,900</span>
-                </div>
-                <ul class="mb-0 small text-muted ps-3">
-                    <li>
-                        {% if lang == 'en' %}
-                            5 pages (Home, About, Products…)
-                        {% else %}
-                            5个页面展示 (Home, About, Products...)
-                        {% endif %}
-                    </li>
-                    <li>
-                        {% if lang == 'en' %}
-                            Mobile responsive layout
-                        {% else %}
-                            手机端自适应 (Mobile Responsive)
-                        {% endif %}
-                    </li>
-                    <li>
-                        {% if lang == 'en' %}
-                            Basic SEO setup
-                        {% else %}
-                            基础SEO设置
-                        {% endif %}
-                    </li>
-                </ul>
-            </div>
-            <div class="p-3 rounded-3 mb-0 border border-primary position-relative" style="background: #eff6ff;">
+            {% for pkg in packages %}
+            <div class="p-3 rounded-3 mb-3 border {% if pkg.recommended %}border-primary position-relative{% endif %}"
+                 style="background: {% if pkg.recommended %}#eff6ff{% else %}#f9fafb{% endif %};">
+                {% if pkg.recommended %}
                 <span class="position-absolute top-0 end-0 badge bg-primary m-2" style="font-size:0.6rem;">
                     {% if lang == 'en' %}Recommended{% else %}推荐{% endif %}
                 </span>
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                    <span class="fw-bold text-primary">
-                        {% if lang == 'en' %}Professional B2B Site{% else %}专业B2B官网{% endif %}
+                {% endif %}
+
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                    <span class="fw-bold text-dark" style="font-size: 0.9rem;">
+                        {{ pkg.display_name }}
                     </span>
-                    <span class="text-primary fw-bold">¥6,800</span>
+                    <span class="text-primary fw-bold">{{ pkg.display_price }}</span>
                 </div>
-                <ul class="mb-0 small text-muted ps-3">
-                    <li>
-                        {% if lang == 'en' %}
-                            10+ pages & product catalog
-                        {% else %}
-                            10+ 页面 & 产品目录系统
-                        {% endif %}
-                    </li>
-                    <li>
-                        {% if lang == 'en' %}
-                            Bilingual CN/EN
-                        {% else %}
-                            双语支持 (CN/EN)
-                        {% endif %}
-                    </li>
-                    <li>
-                        {% if lang == 'en' %}
-                            WhatsApp / inquiry form integration
-                        {% else %}
-                            WhatsApp / 询盘表单集成
-                        {% endif %}
-                    </li>
+
+                {% if pkg.demo_title %}
+                <p class="small text-muted mb-1">
+                    {% if lang == 'en' %}
+                        Based on: {{ pkg.demo_title }}
+                    {% else %}
+                        基于演示站点：{{ pkg.demo_title }}
+                    {% endif %}
+                </p>
+                {% endif %}
+
+                <ul class="mb-2 small text-muted ps-3">
+                    {% for item in pkg.display_bullets[:3] %}
+                    <li>{{ item }}</li>
+                    {% endfor %}
                 </ul>
+
+                {% if pkg.demo_url %}
+                <a href="{{ pkg.demo_url }}" class="btn btn-light btn-sm w-100 mb-1">
+                    {% if lang == 'en' %}Open demo{% else %}查看演示站{% endif %}
+                </a>
+                {% endif %}
+
+                {% if pkg.display_ai_options %}
+                <p class="small text-primary mb-0">
+                    {% if lang == 'en' %}AI options:{% else %}AI 可选服务：{% endif %}
+                    {{ pkg.display_ai_options | join(' · ') }}
+                </p>
+                {% endif %}
             </div>
+            {% endfor %}
+
+            <p class="small text-muted mt-1 mb-0">
+                {% if lang == 'en' %}
+                    Final price depends on content, languages and AI options. Use the calculator below or contact us on WeChat.
+                {% else %}
+                    最终价格会根据具体页面数量、语言版本以及 AI 功能选择进行调整。可先用下方估算器预估，或直接微信联系。
+                {% endif %}
+            </p>
         </div>
     </div>
 
-    <div class="wx-card">
+    <!-- Banking & Payment Options (WeChat view) -->
+    <div class="wx-card" id="payments">
+    <div class="wx-card-header">
+        <i class="fa-solid fa-credit-card text-warning"></i>
+        <span>
+        {% if lang == 'en' %}Banking & Payment{% else %}收款与支付{% endif %}
+        </span>
+    </div>
+    <div class="p-3">
+        <p class="small text-muted mb-3">
+        {% if lang == 'en' %}
+            For export projects we usually combine classic bank transfer with 1–2 online options,
+            so your buyers can choose what is easiest for them.
+        {% else %}
+            对外贸网站来说，一般会以银行电汇为主，再配合 1–2 个在线收款方式，
+            让客户选择最方便的付款方式。
+        {% endif %}
+        </p>
+
+        <div class="mb-3">
+        <h6 class="fw-bold mb-1">
+            {% if lang == 'en' %}Bank transfer (T/T){% else %}银行电汇（T/T）{% endif %}
+        </h6>
+        <p class="small text-muted mb-0">
+            {% if lang == 'en' %}
+            Standard for larger B2B orders. Orders are placed via the site, and you send a proforma
+            invoice with your USD / EUR / CNY bank details.
+            {% else %}
+            适合金额较大的 B2B 订单。客户通过网站下单后，由您发送含有美元 / 欧元 / 人民币账号的形式发票。
+            {% endif %}
+        </p>
+        </div>
+
+        <div class="mb-3">
+        <h6 class="fw-bold mb-1">
+            {% if lang == 'en' %}PayPal & Wise{% else %}PayPal / Wise{% endif %}
+        </h6>
+        <p class="small text-muted mb-0">
+            {% if lang == 'en' %}
+            Very convenient for samples and small orders. We help you show clear instructions on the site
+            and connect the workflow (order → email → PayPal / Wise link).
+            {% else %}
+            适合样品或小额订单，可在网站上清楚写明付款步骤，并结合邮件发送 PayPal / Wise 链接。
+            {% endif %}
+        </p>
+        </div>
+
+        <div class="mb-2">
+        <h6 class="fw-bold mb-1">
+            {% if lang == 'en' %}Card / Wallet gateways{% else %}银行卡 / 钱包支付{% endif %}
+        </h6>
+        <p class="small text-muted mb-0">
+            {% if lang == 'en' %}
+            For full online shops we can integrate card payments via Stripe and coordinate cross-border
+            WeChat Pay / Alipay with partners. This is optional and quoted separately.
+            {% else %}
+            若需要完整独立商城，可通过 Stripe 接入信用卡支付，并与合作方对接跨境微信支付 / 支付宝，
+            作为可选增值服务单独报价。
+            {% endif %}
+        </p>
+        </div>
+
+        <hr class="my-3">
+
+        <p class="small text-muted mb-2">
+        {% if lang == 'en' %}
+            In our demos, payments are simulated (no real charges). In real projects, we configure
+            the flow according to your bank accounts and compliance requirements.
+        {% else %}
+            在演示网站中，付款流程仅为模拟（不会真实扣款）；实际项目中，我们会根据您的账户情况
+            和合规要求进行定制配置。
+        {% endif %}
+        </p>
+
+        <a href="#contact-area" class="btn btn-light w-100">
+        {% if lang == 'en' %}Talk about payment setup{% else %}咨询收款方案{% endif %}
+        </a>
+    </div>
+    </div>
+
+    <!-- Cost Estimator -->
+    <div class="wx-card" id="calculator">
         <div class="wx-card-header">
             <i class="fa-solid fa-calculator text-warning"></i>
             <span>
@@ -319,6 +401,20 @@
         </div>
     </div>
 
+    <!-- AI Smart RFQ widget -->
+    <div class="wx-card">
+        <div class="wx-card-header">
+            <i class="fa-solid fa-wand-magic-sparkles text-warning"></i>
+            <span>
+                {% if lang == 'zh' %}AI 智能 RFQ 生成{% else %}AI Smart RFQ (Demo){% endif %}
+            </span>
+        </div>
+        <div class="p-3">
+            {% include "_smart_rfq_widget.html" %}
+        </div>
+    </div>
+
+    <!-- Why independent site -->
     <div class="wx-card p-3">
         <h6 class="fw-bold mb-3">
             {% if lang == 'en' %}Why an independent site?{% else %}为什么选择独立站？{% endif %}
@@ -343,6 +439,7 @@
         </div>
     </div>
 
+    <!-- WeChat contact -->
     <div class="wx-card p-4 text-center" id="contact-area">
         <h6 class="fw-bold mb-3">
             {% if lang == 'en' %}Contact & WeChat{% else %}联系咨询{% endif %}
@@ -352,11 +449,18 @@
                  onerror="this.src='https://placehold.co/150x150?text=WeChat+QR'"
                  class="img-fluid" style="width: 140px; height: 140px;">
         </div>
-        <p class="small text-muted mb-0">
+        <p class="small text-muted mb-1">
             {% if lang == 'en' %}
                 Long-press the QR code to add on WeChat and get a quote.
             {% else %}
                 长按识别二维码，获取报价方案。
+            {% endif %}
+        </p>
+        <p class="small text-muted mb-0">
+            {% if lang == 'en' %}
+                You can also try the AI chat bubble in the corner for quick questions (demo).
+            {% else %}
+                页面右下角的 AI 聊天气泡可用于快速问答（演示功能）。
             {% endif %}
         </p>
     </div>

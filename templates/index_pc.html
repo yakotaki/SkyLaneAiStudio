@@ -160,11 +160,13 @@
             </h2>
             <p class="text-muted">
                 {% if lang == 'en' %}
-                    These demos run on local ports (5001–5004). They show what we can build for you.
+                    These are real demo sites running under SkyLane AI Studio. Each one can be turned into
+                    a full project for your factory, brand or trading company.
                 {% else %}
-                    以下为本地运行的演示站点（端口 5001–5004），展示我们可以为您搭建的网站类型。
+                    下面是 SkyLane AI Studio 搭建的真实演示网站，每一个都可以快速复制并升级为您企业的正式官网。
                 {% endif %}
             </p>
+
         </div>
 
         <div class="row g-4">
@@ -197,48 +199,153 @@
     </div>
 </section>
 
-<section id="pricing" class="py-5 bg-light-subtle">
-    <div class="container py-4">
-        <div class="text-center mb-5">
-            <span class="section-label">
-                {% if lang == 'en' %}Investment{% else %}价格区间{% endif %}
-            </span>
-            <h2 class="fw-bold display-6">
-                {% if lang == 'en' %}Simple, Transparent Pricing{% else %}简单透明的建站报价{% endif %}
-            </h2>
-        </div>
-
-        <div class="row g-4 justify-content-center">
-            {% for pkg in packages %}
-            <div class="col-md-4">
-                <div class="card h-100 pricing-card bg-white position-relative {{ 'border-warning shadow' if pkg.recommended else 'border-0' }}">
-                    {% if pkg.recommended %}
-                    <span class="popular-badge shadow-sm">
-                        {% if lang == 'en' %}MOST POPULAR{% else %}推荐套餐{% endif %}
-                    </span>
-                    {% endif %}
-                    <div class="card-body p-4 d-flex flex-column">
-                        <h5 class="fw-bold text-muted text-uppercase small ls-1 mb-2">
-                            {{ pkg.name }}
-                        </h5>
-                        <h2 class="display-5 fw-bold mb-4">{{ pkg.price }}</h2>
-                        <ul class="list-unstyled mb-4 flex-grow-1">
-                            {% for feature in pkg.features %}
-                            <li class="mb-2 d-flex align-items-start">
-                                <i class="fa-solid fa-check text-success mt-1 me-2"></i>
-                                <span>{{ feature }}</span>
-                            </li>
-                            {% endfor %}
-                        </ul>
-                        <a href="#contact" class="btn {{ 'btn-dark' if pkg.recommended else 'btn-outline-dark' }} w-100">
-                            {% if lang == 'en' %}Choose Plan{% else %}选择此套餐{% endif %}
-                        </a>
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
+<section id="payments" class="py-5">
+  <div class="container py-4">
+    <div class="text-center mb-5">
+      <span class="section-label">
+        {% if lang == 'en' %}Banking & Payment{% else %}收款与支付方式{% endif %}
+      </span>
+      <h2 class="fw-bold display-6">
+        {% if lang == 'en' %}
+          Payment options for your export website
+        {% else %}
+          为出口型网站配置多种收款方式
+        {% endif %}
+      </h2>
+      <p class="text-muted mt-3 mb-0 col-lg-8 mx-auto">
+        {% if lang == 'en' %}
+          Depending on your target markets and company setup, we can help you connect safe and practical
+          payment methods – from classic bank transfer to online gateways.
+        {% else %}
+          根据您的目标市场和公司资质，我们可以帮助您配置安全、实用的收款方式，
+          从传统电汇到在线支付网关，灵活组合。
+        {% endif %}
+      </p>
     </div>
+
+    <div class="row g-4">
+      <!-- Bank transfer -->
+      <div class="col-md-4">
+        <div class="card h-100 shadow-sm border-0">
+          <div class="card-body">
+            <div class="d-flex align-items-center mb-3">
+              <div class="icon-round bg-primary-soft text-primary me-3">
+                <i class="fa-solid fa-building-columns"></i>
+              </div>
+              <h5 class="mb-0">
+                {% if lang == 'en' %}Bank transfer (T/T){% else %}银行电汇（T/T）{% endif %}
+              </h5>
+            </div>
+            <p class="text-muted small">
+              {% if lang == 'en' %}
+                Standard option for B2B export orders. Buyers place orders online, and you send a
+                proforma invoice with your USD / EUR / CNY bank details.
+              {% else %}
+                适合大部分 B2B 出口订单。客户在网站提交订单后，由您发送形式发票（PI），
+                包含美元 / 欧元 / 人民币收款账号信息。
+              {% endif %}
+            </p>
+            <ul class="small text-muted ps-3 mb-0">
+              {% if lang == 'en' %}
+                <li>Show payment terms clearly (30% deposit, 70% before shipment, etc.)</li>
+                <li>Support multi-currency bank accounts (CNY, USD, EUR)</li>
+                <li>Good for larger order values</li>
+              {% else %}
+                <li>在官网清晰展示付款条款（如 30% 订金 + 70% 出货前付清）</li>
+                <li>支持多币种账户（人民币 / 美元 / 欧元）</li>
+                <li>适合金额较大的订单</li>
+              {% endif %}
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- PayPal / Wise -->
+      <div class="col-md-4">
+        <div class="card h-100 shadow-sm border-0">
+          <div class="card-body">
+            <div class="d-flex align-items-center mb-3">
+              <div class="icon-round bg-success-soft text-success me-3">
+                <i class="fa-brands fa-paypal"></i>
+              </div>
+              <h5 class="mb-0">
+                {% if lang == 'en' %}PayPal & Wise{% else %}PayPal / Wise 收款{% endif %}
+              </h5>
+            </div>
+            <p class="text-muted small">
+              {% if lang == 'en' %}
+                For small or sample orders, online wallets are convenient for overseas buyers.
+                We help you show the correct instructions and connect forms / email workflow.
+              {% else %}
+                适合样品订单或金额较小的批次。对海外买家来说操作方便，
+                我们帮助您在网站上展示正确的操作说明，并对接表单 / 邮件流程。
+              {% endif %}
+            </p>
+            <ul class="small text-muted ps-3 mb-0">
+              {% if lang == 'en' %}
+                <li>PayPal invoice or payment link after RFQ</li>
+                <li>Wise multi-currency accounts for lower fees</li>
+                <li>Clear step-by-step instructions on the website</li>
+              {% else %}
+                <li>客户询价后发送 PayPal 账单或付款链接</li>
+                <li>支持 Wise 多币种账户，手续费更低</li>
+                <li>在官网用图文说明具体操作步骤</li>
+              {% endif %}
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stripe / WeChat Pay / Alipay -->
+      <div class="col-md-4">
+        <div class="card h-100 shadow-sm border-0">
+          <div class="card-body">
+            <div class="d-flex align-items-center mb-3">
+              <div class="icon-round bg-warning-soft text-warning me-3">
+                <i class="fa-solid fa-credit-card"></i>
+              </div>
+              <h5 class="mb-0">
+                {% if lang == 'en' %}Card & Wallet Gateways{% else %}银行卡 / 钱包支付网关{% endif %}
+              </h5>
+            </div>
+            <p class="text-muted small">
+              {% if lang == 'en' %}
+                For full online shop projects, we can integrate card or wallet payments through
+                providers like Stripe, and coordinate with partners for WeChat Pay / Alipay.
+              {% else %}
+                对于完整商城类项目，我们可以通过 Stripe 等服务集成信用卡 / 电子钱包支付，
+                并与合作方协调接入微信支付 / 支付宝等方案。
+              {% endif %}
+            </p>
+            <ul class="small text-muted ps-3 mb-0">
+              {% if lang == 'en' %}
+                <li>Stripe (Visa / Master / Apple Pay / Google Pay)</li>
+                <li>WeChat Pay & Alipay via cross-border partners</li>
+                <li>Separate quotation depending on volume & region</li>
+              {% else %}
+                <li>Stripe 支持多种国际信用卡与 Apple Pay / Google Pay</li>
+                <li>通过跨境支付服务商接入微信支付 / 支付宝</li>
+                <li>根据收款币种与成交量单独报价</li>
+              {% endif %}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center mt-4">
+      <p class="text-muted small mb-2">
+        {% if lang == 'en' %}
+          We will confirm together which payment methods match your company status and target buyers.
+        {% else %}
+          我们会根据您的公司资质、目标客户群体，一起确认最合适的收款方式组合。
+        {% endif %}
+      </p>
+      <a href="#contact" class="btn btn-outline-dark">
+        {% if lang == 'en' %}Discuss payment setup{% else %}咨询收款方案{% endif %}
+      </a>
+    </div>
+  </div>
 </section>
 
 <section id="calculator" class="py-5">
@@ -373,6 +480,10 @@
                              style="width: 100px; height: 100px; border-radius: 8px;">
                     </div>
                 </form>
+            </div>
+            <div class="col-lg-6">
+                <!-- Smart RFQ widget -->
+                {% include "_smart_rfq_widget.html" %}
             </div>
         </div>
     </div>

@@ -1,0 +1,187 @@
+{% if enable_ai_chat %}
+<style>
+  .ai-chat-launcher {
+      position: fixed;
+      right: 1.5rem;
+      bottom: 1.5rem;
+      z-index: 1050;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #0b1120;
+      cursor: pointer;
+      box-shadow: 0 18px 35px rgba(15,23,42,0.75);
+  }
+
+  .ai-chat-window {
+      position: fixed;
+      right: 1.5rem;
+      bottom: 5.5rem;
+      width: 320px;
+      max-width: calc(100% - 3rem);
+      border-radius: 16px;
+      overflow: hidden;
+      background: #020617;
+      border: 1px solid rgba(148,163,184,0.7);
+      box-shadow: 0 24px 60px rgba(15,23,42,0.9);
+      display: none;
+      flex-direction: column;
+      z-index: 1049;
+  }
+
+  .ai-chat-header {
+      padding: .65rem .9rem;
+      background: linear-gradient(135deg, #0f172a, #020617);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: .8rem;
+  }
+
+  .ai-chat-header-title {
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+  }
+
+  .ai-chat-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #22c55e;
+      box-shadow: 0 0 8px #22c55e;
+  }
+
+  .ai-chat-body {
+      padding: .6rem .6rem;
+      background: radial-gradient(circle at top, #0f172a, #020617 55%, #000 100%);
+      min-height: 220px;
+      max-height: 340px;
+      overflow-y: auto;
+      font-size: .8rem;
+  }
+
+  .ai-msg {
+      margin-bottom: .5rem;
+      display: flex;
+  }
+
+  .ai-msg.ai-user {
+      justify-content: flex-end;
+  }
+
+  .ai-msg-bubble {
+      padding: .45rem .7rem;
+      border-radius: 14px;
+      max-width: 80%;
+      line-height: 1.35;
+  }
+
+  .ai-msg.ai-user .ai-msg-bubble {
+      background: #0ea5e9;
+      color: #0b1120;
+      border-bottom-right-radius: 3px;
+  }
+
+  .ai-msg.ai-bot .ai-msg-bubble {
+      background: rgba(15,23,42,0.9);
+      color: #e5e7eb;
+      border: 1px solid rgba(148,163,184,0.6);
+      border-bottom-left-radius: 3px;
+  }
+
+  .ai-chat-footer {
+      padding: .5rem .6rem .6rem;
+      background: #020617;
+      border-top: 1px solid rgba(31,41,55,0.9);
+      display: flex;
+      gap: .4rem;
+  }
+
+  .ai-chat-footer textarea {
+      flex: 1;
+      border-radius: 12px;
+      border: 1px solid rgba(55,65,81,0.9);
+      background: #020617;
+      color: #e5e7eb;
+      font-size: .78rem;
+      padding: .35rem .45rem;
+      resize: none;
+      max-height: 60px;
+      outline: none;
+  }
+
+  .ai-chat-send-btn {
+      border-radius: 999px;
+      border: none;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+      color: #0b1120;
+      cursor: pointer;
+  }
+
+  .ai-chat-loader {
+      font-size: .72rem;
+      color: #9ca3af;
+      margin-bottom: .35rem;
+  }
+</style>
+
+<div class="ai-chat-window" id="aiChatWindow">
+    <div class="ai-chat-header">
+        <div class="ai-chat-header-title">
+            <div class="ai-chat-dot"></div>
+            <span>
+                {% if lang == 'zh' %}
+                    网站顾问（演示）
+                {% else %}
+                    Website Assistant (Demo)
+                {% endif %}
+            </span>
+        </div>
+        <button type="button" class="btn btn-sm btn-outline-secondary border-0 text-white p-0"
+                style="font-size: 0.8rem;" onclick="SkyLaneAIChat.toggleWindow()">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+    </div>
+    <div class="ai-chat-body" id="aiChatBody">
+        <div class="ai-msg ai-bot">
+            <div class="ai-msg-bubble">
+                {% if lang == 'zh' %}
+                    你好，我是 SkyLane AI Studio 的网站顾问助手。可以告诉我你是做什么产品的、目标市场在哪个国家，以及你大概希望网站提供哪些内容吗？
+                {% else %}
+                    Hi, I’m the website assistant from SkyLane AI Studio. Tell me what you sell, your target market, and what you expect from your website, and I’ll suggest a structure and package.
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="ai-chat-footer">
+        <textarea id="aiChatInput"
+                  rows="1"
+                  placeholder="{% if lang == 'zh' %}简单描述一下你需要的网站...{% else %}Briefly describe the website you need...{% endif %}"></textarea>
+        <button class="ai-chat-send-btn" type="button" onclick="SkyLaneAIChat.send()">
+            <i class="fa-solid fa-paper-plane"></i>
+        </button>
+    </div>
+</div>
+
+<div class="ai-chat-launcher" id="aiChatLauncher" onclick="SkyLaneAIChat.toggleWindow()">
+    <i class="fa-solid fa-comments"></i>
+</div>
+
+<script src="{{ url_for('static', filename='js/ai_chat_widget.js') }}"></script>
+<script>
+    // Initialize widget with language for this page
+    SkyLaneAIChat.init({
+        lang: "{{ 'zh' if lang == 'zh' else 'en' }}"
+    });
+</script>
+{% endif %}

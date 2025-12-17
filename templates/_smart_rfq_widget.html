@@ -1,0 +1,192 @@
+{% if ENABLE_SMART_RFQ is not defined or ENABLE_SMART_RFQ %}
+<div class="card shadow-sm border-0 rounded-4 mt-4" id="smartRfqCard">
+  <div class="card-body p-4">
+    <div class="d-flex align-items-center justify-content-between mb-3">
+      <div>
+        <div class="text-uppercase small text-primary fw-semibold mb-1">
+          {% if lang == 'zh' %}AI 智能 RFQ 生成{% else %}AI Smart RFQ (Demo){% endif %}
+        </div>
+        <h5 class="card-title mb-1">
+          {% if lang == 'zh' %}
+            用一段简单描述，生成专业询盘
+          {% else %}
+            Turn a rough message into a structured RFQ
+          {% endif %}
+        </h5>
+        <p class="text-muted small mb-0">
+          {% if lang == 'zh' %}
+            填写几个关键字段，AI 会生成一份英文 RFQ 和中文版本，方便直接发给工厂或内部团队。
+          {% else %}
+            Fill a few key fields and AI will produce a clean English RFQ and a Chinese copy you can forward to factories.
+          {% endif %}
+        </p>
+      </div>
+      <div class="text-end d-none d-md-block">
+        <span class="badge rounded-pill text-bg-light border">
+          <i class="fa-solid fa-wand-magic-sparkles me-1"></i>
+          {% if lang == 'zh' %}演示功能{% else %}Demo feature{% endif %}
+        </span>
+      </div>
+    </div>
+
+    <form id="smartRfqForm" onsubmit="return SkyLaneSmartRFQ.submit();">
+      <div class="row g-3 mb-3">
+        <div class="col-md-4">
+          <label class="form-label small mb-1">
+            {% if lang == 'zh' %}公司名称{% else %}Company{% endif %}
+          </label>
+          <input type="text"
+                 class="form-control form-control-sm"
+                 name="company"
+                 placeholder="{% if lang == 'zh' %}例如：Ningbo Bright Tools Co., Ltd.{% else %}e.g. Ningbo Bright Tools Co., Ltd.{% endif %}">
+        </div>
+        <div class="col-md-4">
+          <label class="form-label small mb-1">
+            {% if lang == 'zh' %}联系人姓名{% else %}Contact name{% endif %}
+          </label>
+          <input type="text"
+                 class="form-control form-control-sm"
+                 name="buyer_name"
+                 placeholder="{% if lang == 'zh' %}您的名字{% else %}Your name{% endif %}">
+        </div>
+        <div class="col-md-4">
+          <label class="form-label small mb-1">Email</label>
+          <input type="email"
+                 class="form-control form-control-sm"
+                 name="email"
+                 placeholder="you@example.com">
+        </div>
+      </div>
+
+      <div class="row g-3 mb-3">
+        <div class="col-md-4">
+          <label class="form-label small mb-1">
+            {% if lang == 'zh' %}采购国家 / 地区{% else %}Buyer country/region{% endif %}
+          </label>
+          <input type="text"
+                 class="form-control form-control-sm"
+                 name="country"
+                 placeholder="{% if lang == 'zh' %}例如：德国 / 美国{% else %}e.g. Germany / USA{% endif %}">
+        </div>
+        <div class="col-md-4">
+          <label class="form-label small mb-1">
+            {% if lang == 'zh' %}产品方向{% else %}Product focus{% endif %}
+          </label>
+          <input type="text"
+                 class="form-control form-control-sm"
+                 name="product"
+                 placeholder="{% if lang == 'zh' %}例如：套筒组套、手工具、家居用品{% else %}e.g. socket sets, hand tools, home goods{% endif %}">
+        </div>
+        <div class="col-md-4">
+          <label class="form-label small mb-1">
+            {% if lang == 'zh' %}数量 / 年度采购额{% else %}Qty / annual volume{% endif %}
+          </label>
+          <input type="text"
+                 class="form-control form-control-sm"
+                 name="quantity"
+                 placeholder="{% if lang == 'zh' %}例如：每年 3–5 个柜{% else %}e.g. 3–5 containers per year{% endif %}">
+        </div>
+      </div>
+
+      <div class="row g-3 mb-3">
+        <div class="col-md-4">
+          <label class="form-label small mb-1">
+            Incoterm
+          </label>
+          <input type="text"
+                 class="form-control form-control-sm"
+                 name="incoterm"
+                 placeholder="FOB Ningbo, CIF Hamburg, DDP, etc.">
+        </div>
+        <div class="col-md-4">
+          <label class="form-label small mb-1">
+            {% if lang == 'zh' %}目的港 / 城市{% else %}Target port / city{% endif %}
+          </label>
+          <input type="text"
+                 class="form-control form-control-sm"
+                 name="target_port"
+                 placeholder="{% if lang == 'zh' %}例如：Hamburg / Los Angeles{% else %}e.g. Hamburg / Los Angeles{% endif %}">
+        </div>
+        <div class="col-md-4">
+          <label class="form-label small mb-1">
+            {% if lang == 'zh' %}质量档次{% else %}Quality level{% endif %}
+          </label>
+          <input type="text"
+                 class="form-control form-control-sm"
+                 name="quality_level"
+                 placeholder="{% if lang == 'zh' %}如：DIY / 中档 / 专业级{% else %}e.g. DIY / mid-range / professional{% endif %}">
+        </div>
+      </div>
+
+      <div class="row g-3 mb-3">
+        <div class="col-md-6">
+          <label class="form-label small mb-1">
+            {% if lang == 'zh' %}认证 / 标准{% else %}Certifications / standards{% endif %}
+          </label>
+          <input type="text"
+                 class="form-control form-control-sm"
+                 name="certifications"
+                 placeholder="CE, GS, ROHS, EN/DIN, etc.">
+        </div>
+        <div class="col-md-6">
+          <label class="form-label small mb-1">
+            {% if lang == 'zh' %}包装要求{% else %}Packaging{% endif %}
+          </label>
+          <input type="text"
+                 class="form-control form-control-sm"
+                 name="packaging"
+                 placeholder="{% if lang == 'zh' %}单个彩盒 / 成套塑盒 / 中性箱Mark{% else %}single color box / blow case / neutral carton marks{% endif %}">
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label small mb-1">
+          {% if lang == 'zh' %}补充说明{% else %}Extra notes{% endif %}
+        </label>
+        <textarea class="form-control form-control-sm"
+                  rows="3"
+                  name="notes"
+                  placeholder="{% if lang == 'zh' %}用自然语言补充说明，例如现有供应商问题、目标价格区间、验货要求等。{% else %}Any extra info: current supplier issues, price targets, inspection needs, etc.{% endif %}"></textarea>
+      </div>
+
+      <div class="d-flex align-items-center justify-content-between">
+        <div class="small text-muted" id="smartRfqStatus">
+          {% if lang == 'zh' %}
+            * 本功能仅为演示。生成的 RFQ 不会自动发送，可以复制到邮件中使用。
+          {% else %}
+            * Demo only. The generated RFQ is not sent automatically – you can copy it into your email.
+          {% endif %}
+        </div>
+        <button type="submit" class="btn btn-sm btn-primary rounded-pill px-3">
+          <i class="fa-solid fa-wand-magic-sparkles me-1"></i>
+          {% if lang == 'zh' %}生成 RFQ{% else %}Generate RFQ{% endif %}
+        </button>
+      </div>
+    </form>
+
+    <hr class="my-3">
+
+    <div class="row g-3" id="smartRfqResult" style="display:none;">
+      <div class="col-md-6">
+        <label class="form-label small mb-1">
+          RFQ (English)
+        </label>
+        <textarea class="form-control form-control-sm" rows="10" readonly id="smartRfqEn"></textarea>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label small mb-1">
+          RFQ（中文）
+        </label>
+        <textarea class="form-control form-control-sm" rows="10" readonly id="smartRfqZh"></textarea>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/smart_rfq.js') }}"></script>
+<script>
+  SkyLaneSmartRFQ.init({
+      lang: "{{ 'zh' if lang == 'zh' else 'en' }}"
+  });
+</script>
+{% endif %}

@@ -1,0 +1,295 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {% if lang == 'zh' %}
+        出口指挥中心 – SkyLane AI Studio
+    {% else %}
+        Export Command Center – SkyLane AI Studio
+    {% endif %}
+{% endblock %}
+
+{% block extra_head %}
+<style>
+    .dash-hero {
+        background: radial-gradient(circle at top left, #1d4ed8 0, #0f172a 45%, #020617 100%);
+        color: white;
+        padding: 3rem 0 2.5rem 0;
+    }
+    .dash-hero h1 {
+        letter-spacing: -0.03em;
+    }
+    .stat-card {
+        border-radius: 1rem;
+        border: none;
+        box-shadow: 0 15px 30px -15px rgba(15, 23, 42, 0.35);
+        background: linear-gradient(135deg, #0f172a, #111827);
+        color: #e5e7eb;
+    }
+    .stat-card small {
+        color: #9ca3af;
+    }
+    .stat-number {
+        font-size: 1.8rem;
+        font-weight: 800;
+    }
+    .dash-table th {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: #6b7280;
+        border-top: none;
+    }
+    .dash-table td {
+        vertical-align: middle;
+        font-size: 0.9rem;
+    }
+    .badge-ai {
+        font-size: 0.7rem;
+    }
+    .badge-status-online {
+        background: #bbf7d0;
+        color: #166534;
+    }
+    .badge-status-building {
+        background: #fef3c7;
+        color: #92400e;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<section class="dash-hero">
+    <div class="container">
+        <div class="row align-items-center g-4">
+            <div class="col-lg-7">
+                <span class="section-label text-uppercase">
+                    {% if lang == 'en' %}
+                        Export Command Center
+                    {% else %}
+                        出口型网站控制台
+                    {% endif %}
+                </span>
+                <h1 class="display-5 fw-bold mb-3">
+                    {% if lang == 'en' %}
+                        One place to see all your export websites
+                    {% else %}
+                        一眼看清所有出口官网的运行情况
+                    {% endif %}
+                </h1>
+                <p class="mb-0" style="max-width: 520px;">
+                    {% if lang == 'en' %}
+                        Use this dashboard to monitor live sites, leads, and AI activity.
+                        For each client we can provide a simplified version with their own data.
+                    {% else %}
+                        通过这个控制台，您可以快速查看所有官网上线状态、最近询盘以及 AI 工具使用情况。
+                        每个客户都可以拥有自己的精简版控制台。
+                    {% endif %}
+                </p>
+            </div>
+            <div class="col-lg-5">
+                <div class="row g-3">
+                    <div class="col-4">
+                        <div class="card stat-card p-3 text-center">
+                            <small class="text-uppercase">
+                                {% if lang == 'en' %}Live sites{% else %}已上线网站{% endif %}
+                            </small>
+                            <div class="stat-number mt-2">{{ summary.total_sites }}</div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="card stat-card p-3 text-center">
+                            <small class="text-uppercase">
+                                {% if lang == 'en' %}Leads (30 days){% else %}30天询盘数{% endif %}
+                            </small>
+                            <div class="stat-number mt-2">{{ summary.total_leads_30d }}</div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="card stat-card p-3 text-center">
+                            <small class="text-uppercase">
+                                {% if lang == 'en' %}Sites with AI{% else %}启用 AI 站点{% endif %}
+                            </small>
+                            <div class="stat-number mt-2">{{ summary.ai_enabled_sites }}</div>
+                        </div>
+                    </div>
+                </div>
+                <p class="small mt-3 mb-0 text-end text-white-50">
+                    {% if lang == 'en' %}
+                        Demo data for illustration. Real projects get live analytics.
+                    {% else %}
+                        当前为演示数据，真实项目可接入实时统计。
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <div class="row g-4">
+            <!-- Sites overview -->
+            <div class="col-lg-7">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">
+                            {% if lang == 'en' %}Websites overview{% else %}网站总览{% endif %}
+                        </h5>
+                        <span class="badge bg-indigo-100 text-indigo-700" style="font-size: 0.75rem;">
+                            {% if lang == 'en' %}
+                                Demo client view
+                            {% else %}
+                                客户可见示例界面
+                            {% endif %}
+                        </span>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table align-middle mb-0 dash-table">
+                            <thead>
+                                <tr>
+                                    <th>{% if lang == 'en' %}Site{% else %}网站{% endif %}</th>
+                                    <th>{% if lang == 'en' %}Type{% else %}类型{% endif %}</th>
+                                    <th>{% if lang == 'en' %}Status{% else %}状态{% endif %}</th>
+                                    <th class="text-end">{% if lang == 'en' %}Leads (30d){% else %}30天询盘{% endif %}</th>
+                                    <th>{% if lang == 'en' %}AI{% else %}AI 功能{% endif %}</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for s in summary.sites %}
+                                <tr>
+                                    <td>
+                                        <div class="fw-semibold">{{ s.display_name }}</div>
+                                        <div class="small text-muted">
+                                            {{ s.url }}
+                                        </div>
+                                    </td>
+                                    <td>{{ s.type }}</td>
+                                    <td>
+                                        {% if s.status == 'online' %}
+                                            <span class="badge badge-status-online">
+                                                {% if lang == 'en' %}Online{% else %}已上线{% endif %}
+                                            </span>
+                                        {% elif s.status == 'building' %}
+                                            <span class="badge badge-status-building">
+                                                {% if lang == 'en' %}Building{% else %}制作中{% endif %}
+                                            </span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">
+                                                {{ s.status }}
+                                            </span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="text-end fw-semibold">
+                                        {{ s.leads_30d }}
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-light text-dark badge-ai">
+                                            {{ s.ai_label_str }}
+                                        </span>
+                                    </td>
+                                    <td class="text-end">
+                                        <a href="{{ s.url }}" class="btn btn-sm btn-outline-primary" target="_blank">
+                                            {% if lang == 'en' %}Open{% else %}访问{% endif %}
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent leads -->
+            <div class="col-lg-5">
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-header bg-white border-0">
+                        <h5 class="mb-0">
+                            {% if lang == 'en' %}Recent inquiries (demo){% else %}最近询盘（示例）{% endif %}
+                        </h5>
+                    </div>
+                    <div class="list-group list-group-flush">
+                        {% for lead in summary.recent_leads %}
+                        <div class="list-group-item">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <div class="fw-semibold">{{ lead.company }}</div>
+                                    <div class="small text-muted">
+                                        {{ lead.country }} · {{ lead.site_name }}
+                                    </div>
+                                </div>
+                                <div class="text-end">
+                                    <div class="small text-muted">{{ lead.date }}</div>
+                                    <div class="small fw-semibold">{{ lead.budget }}</div>
+                                </div>
+                            </div>
+                            <p class="small mb-0 mt-2 text-muted">
+                                {{ lead.project }}
+                            </p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                        <h6 class="fw-bold mb-2">
+                            {% if lang == 'en' %}
+                                How clients use this dashboard
+                            {% else %}
+                                客户可以如何使用这个控制台
+                            {% endif %}
+                        </h6>
+                        <ul class="small text-muted mb-0">
+                            {% if lang == 'en' %}
+                                <li>See which site brings the most inquiries this month.</li>
+                                <li>Check which sites already have AI tools enabled.</li>
+                                <li>Decide where to invest next: SEO, more content, or AI upgrade.</li>
+                            {% else %}
+                                <li>了解本月哪个网站带来的询盘最多。</li>
+                                <li>查看哪些站点已经接入 AI 工具。</li>
+                                <li>决定下一步重点投入方向：SEO、内容优化还是 AI 升级。</li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Note to prospects -->
+        <div class="row mt-5">
+            <div class="col-lg-10">
+                <div class="alert alert-primary border-0 shadow-sm">
+                    <div class="d-flex">
+                        <div class="me-3">
+                            <i class="fa-solid fa-gauge-high fa-lg"></i>
+                        </div>
+                        <div>
+                            <strong>
+                                {% if lang == 'en' %}
+                                    Want a dashboard like this for your factory?
+                                {% else %}
+                                    想为您的工厂也做一个这样的控制台吗？
+                                {% endif %}
+                            </strong>
+                            <p class="small mb-0 mt-1">
+                                {% if lang == 'en' %}
+                                    We can provide a simplified Export Command Center for your company
+                                    with real analytics, inquiry tracking and AI RFQ tools connected to your own site.
+                                {% else %}
+                                    我们可以为您企业制作专属的“出口指挥中心”，
+                                    显示真实访问数据、询盘记录，并接入专属 AI 询盘助手和 RFQ 工具。
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}

@@ -113,23 +113,39 @@
                         {{ 'Home' if lang == 'en' else '首页' }}
                     </a>
                 </li>
+
+                <!-- Portfolio -->
                 <li class="nav-item">
-                    <a class="nav-link" href="#portfolio">
+                    <a class="nav-link"
+                    href="{% if is_wechat %}{{ url_for('index_wechat', lang=lang) }}#portfolio{% else %}{{ url_for('index_pc', lang=lang) }}#portfolio{% endif %}">
                         {{ 'Portfolio' if lang == 'en' else '案例展示' }}
                     </a>
                 </li>
+
+                <!-- Pricing -->
                 <li class="nav-item">
-                    <a class="nav-link" href="#pricing">
+                    <a class="nav-link"
+                    href="{% if is_wechat %}{{ url_for('index_wechat', lang=lang) }}#pricing{% else %}{{ url_for('index_pc', lang=lang) }}#pricing{% endif %}">
                         {{ 'Pricing' if lang == 'en' else '套餐报价' }}
                     </a>
                 </li>
+
+                <!-- Calculator -->
                 <li class="nav-item">
-                    <a class="nav-link" href="#calculator">
+                    <a class="nav-link"
+                    href="{% if is_wechat %}{{ url_for('index_wechat', lang=lang) }}#calculator{% else %}{{ url_for('index_pc', lang=lang) }}#calculator{% endif %}">
                         {{ 'Calculator' if lang == 'en' else '费用估算' }}
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('dashboard', lang=lang) }}">
+                        {{ 'Export Command Center' if lang == 'en' else '出口指挥中心' }}
+                    </a>
+                </li>
+                <!-- Contact button -->
                 <li class="nav-item ms-2">
-                    <a class="btn btn-dark btn-sm rounded-pill px-3" href="#contact">
+                    <a class="btn btn-dark btn-sm rounded-pill px-3"
+                    href="{% if is_wechat %}{{ url_for('index_wechat', lang=lang) }}#contact-area{% else %}{{ url_for('index_pc', lang=lang) }}#contact{% endif %}">
                         {{ 'Contact' if lang == 'en' else '联系我们' }}
                     </a>
                 </li>
@@ -150,6 +166,7 @@
                     </ul>
                 </li>
             </ul>
+            </ul>
         </div>
     </div>
 </nav>
@@ -157,6 +174,56 @@
 <main>
     {% block content %}{% endblock %}
 </main>
+
+<!-- === Global promo modal: Free WeChat Mini Program for next 10 customers === -->
+<div class="modal fade" id="promoModal" tabindex="-1" aria-labelledby="promoModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow-lg">
+      <div class="modal-header border-0 pb-0">
+        <h5 class="modal-title fw-bold" id="promoModalLabel">
+          {% if lang == 'en' %}
+            Limited Offer: Free WeChat Mini Program
+          {% else %}
+            限时优惠：前 10 位客户赠送微信小程序
+          {% endif %}
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body pt-2">
+        {% if lang == 'en' %}
+            <p class="mb-2">
+                The next <strong>10 new projects</strong> will get a <strong>free WeChat Mini Program</strong>
+                version together with the main website.
+            </p>
+            <ul class="small text-muted mb-0">
+                <li>Optimized for WeChat environment (Mini Program or H5)</li>
+                <li>Same brand & content as your main site</li>
+                <li>Perfect for Chinese customers to check products on mobile</li>
+            </ul>
+        {% else %}
+            <p class="mb-2">
+                现在起，<strong>前 10 位新客户</strong>下单制作官网，
+                我将<strong>免费赠送 1 套微信小程序版本</strong>（或微信 H5 页面）。
+            </p>
+            <ul class="small text-muted mb-0">
+                <li>专门为微信环境优化（小程序 / H5）</li>
+                <li>与主站保持同一品牌与核心内容</li>
+                <li>方便国内客户在手机上随时查看产品</li>
+            </ul>
+        {% endif %}
+      </div>
+      <div class="modal-footer border-0 pt-0 d-flex justify-content-between">
+        <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">
+          {% if lang == 'en' %}Maybe later{% else %}稍后再说{% endif %}
+        </button>
+        <a href="{{ '#contact-area' if is_wechat else '#contact' }}" class="btn btn-dark btn-sm" data-bs-dismiss="modal">
+          {% if lang == 'en' %}Talk about my project{% else %}我想了解详情{% endif %}
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- === End promo modal === -->
 
 <footer class="py-5">
     <div class="container">
@@ -191,6 +258,28 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+{% include "_ai_chat_widget.html" %}
+
+<script>
+  // Auto-show promo once per browser using localStorage
+  document.addEventListener('DOMContentLoaded', function () {
+      try {
+          var key = 'skylane_promo_wechat_free_10';
+          if (!localStorage.getItem(key)) {
+              var modalEl = document.getElementById('promoModal');
+              if (modalEl && typeof bootstrap !== 'undefined' && bootstrap.Modal) {
+                  var promo = new bootstrap.Modal(modalEl);
+                  promo.show();
+                  localStorage.setItem(key, 'seen');
+              }
+          }
+      } catch (e) {
+          // If localStorage is blocked, fail silently
+      }
+  });
+</script>
+
 {% block scripts %}{% endblock %}
 </body>
 </html>
