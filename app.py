@@ -57,7 +57,7 @@ PROJECTS = [
             "en": "Full B2C experience with shopping basket, user accounts, and checkout forms.",
             "zh": "完整的 B2C 独立站体验，包含购物车、用户账号和结算流程。"
         },
-        "url": "https://shop-demo.skylaneai.com/",  # when deployed
+        "url": "https://shop.skylaneai.com/",  # when deployed
         "icon": "fa-cart-shopping"
     }
 ]
