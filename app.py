@@ -1,11 +1,54 @@
-
 import os
-from flask import Flask, render_template, request, flash, redirect, url_for, jsonify
+import json
+from datetime import datetime
+from urllib.parse import urlencode
+
+from flask import Flask, render_template, request, flash, redirect, url_for, jsonify, session, g, Response
+from werkzeug.middleware.proxy_fix import ProxyFix
 
 from openai import OpenAI
 
 app = Flask(__name__)
-app.secret_key = "your_secret_agency_key"  # Required for flash and sessions
+app.secret_key = os.environ.get("SECRET_KEY", "your_secret_agency_key")  # Required for flash + sessions
+app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
+
+# -------------------------
+# Language (default: Chinese)
+# -------------------------
+SUPPORTED_LANGS = {"zh", "en"}
+DEFAULT_LANG = "zh"
+
+
+def get_lang(default: str = DEFAULT_LANG) -> str:
+    """
+    Language selection order:
+      1) ?lang= (en|zh)  -> persisted to session
+      2) session['lang']
+      3) default (zh)
+    """
+    raw = (request.args.get("lang") or session.get("lang") or default or DEFAULT_LANG).strip().lower()
+    lang = "zh" if raw in ("zh", "cn", "zh-cn", "zh-hans") else "en"
+    session["lang"] = lang
+    g.lang = lang
+    return lang
+
+
+@app.context_processor
+def inject_lang_helpers():
+    def switch_lang_url(target_lang: str) -> str:
+        tl = (target_lang or "").strip().lower()
+        tl = "zh" if tl in ("zh", "cn", "zh-cn", "zh-hans") else "en"
+
+        args = request.args.to_dict(flat=True)
+        args["lang"] = tl
+        qs = urlencode(args)
+        return request.path + ("?" + qs if qs else "")
+
+    return {
+        "switch_lang_url": switch_lang_url,
+        "lang": getattr(g, "lang", session.get("lang", DEFAULT_LANG)),
+    }
+
 
 # === OpenAI client ===
 client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
@@ -57,36 +100,46 @@ PROJECTS = [
             "en": "Full B2C experience with shopping basket, user accounts, and checkout forms.",
             "zh": "完整的 B2C 独立站体验，包含购物车、用户账号和结算流程。"
         },
-        "url": "https://shop.skylaneai.com/",  # when deployed
+        "url": "https://shop.skylaneai.com/",
         "icon": "fa-cart-shopping"
     }
 ]
 
+# -------------------------
+# Packages (realistic pricing)
+# -------------------------
 PACKAGES = [
     {
         "id": "pkg_factory",
-        "project_id": "factory",  # links to PROJECTS[id="factory"]
-        "name": {
-            "en": "Factory Export Starter Site",
-            "zh": "工厂出口官网 · 入门版"
-        },
-        "price": {
-            "en": "¥3,900",
-            "zh": "¥3,900"
-        },
+        "project_id": "factory",
+        "name": {"en": "Factory Export Starter Site", "zh": "工厂出口官网 · 标准版"},
+        "price": {"en": "¥8,800", "zh": "¥8,800"},
+        "delivery": {"en": "7–10 business days", "zh": "7–10 个工作日"},
         "recommended": False,
         "bullets": {
             "en": [
                 "Based on: Factory B2B export demo",
                 "Up to 5 pages (Home, About, Products, QC, Contact)",
-                "Bilingual EN / CN content",
-                "Inquiry form that sends RFQs to your email"
+                "Bilingual EN / CN structure",
+                "RFQ / inquiry form (to your email)"
             ],
             "zh": [
                 "基于：工厂 B2B 出口演示网站",
                 "最多 5 个页面（首页 / 公司介绍 / 产品列表 / 质量控制 / 联系我们）",
-                "中英双语内容",
+                "中英双语结构",
                 "在线询盘表单（自动发送到您的邮箱）"
+            ]
+        },
+        "excluded": {
+            "en": [
+                "Domain/hosting fees (billed by providers)",
+                "Paid plugins/tools (CRM, paid chat tools, etc.)",
+                "Large-scale product data entry (can be quoted separately)"
+            ],
+            "zh": [
+                "域名/主机费用（由供应商收取）",
+                "第三方付费工具（CRM、付费客服等）",
+                "大批量产品录入（可单独报价）"
             ]
         },
         "ai_options": {
@@ -103,27 +156,34 @@ PACKAGES = [
     {
         "id": "pkg_sourcing",
         "project_id": "sourcing",
-        "name": {
-            "en": "Sourcing & Service Website",
-            "zh": "一站式采购服务官网"
-        },
-        "price": {
-            "en": "¥6,800",
-            "zh": "¥6,800"
-        },
+        "name": {"en": "Sourcing & Service Website", "zh": "一站式采购服务官网"},
+        "price": {"en": "¥12,800", "zh": "¥12,800"},
+        "delivery": {"en": "10–14 business days", "zh": "10–14 个工作日"},
         "recommended": True,
         "bullets": {
             "en": [
                 "Based on: Horizon Sourcing demo",
-                "Service pages for sourcing, QC, logistics and workflow",
+                "Service pages: sourcing, QC, logistics and workflow",
                 "Case studies / project timeline sections",
-                "Contact / RFQ form with multi-step fields"
+                "Multi-step RFQ form for better lead quality"
             ],
             "zh": [
                 "基于：Horizon Sourcing 演示站",
                 "完整服务页面：采购 / 质检 / 物流及流程说明",
                 "案例展示与项目时间线模块",
                 "多步骤询盘表单，收集更完整项目信息"
+            ]
+        },
+        "excluded": {
+            "en": [
+                "Domain/hosting fees (billed by providers)",
+                "Paid analytics/CRM subscriptions",
+                "Custom ERP integrations (quoted separately)"
+            ],
+            "zh": [
+                "域名/主机费用（由供应商收取）",
+                "付费统计/CRM订阅",
+                "定制 ERP/系统对接（需单独报价）"
             ]
         },
         "ai_options": {
@@ -142,20 +202,15 @@ PACKAGES = [
     {
         "id": "pkg_tea",
         "project_id": "tea",
-        "name": {
-            "en": "Brand Storytelling Site (Tea)",
-            "zh": "品牌故事官网（以茶叶为例）"
-        },
-        "price": {
-            "en": "¥4,800",
-            "zh": "¥4,800"
-        },
+        "name": {"en": "Brand Storytelling Site (Tea)", "zh": "品牌故事官网（以茶叶为例）"},
+        "price": {"en": "¥9,800", "zh": "¥9,800"},
+        "delivery": {"en": "7–10 business days", "zh": "7–10 个工作日"},
         "recommended": False,
         "bullets": {
             "en": [
                 "Based on: Premium Tea Brand demo",
                 "Story-driven layout with photos and short videos",
-                "Sections for origin story, process, packaging and gallery",
+                "Origin story, process, packaging and gallery sections",
                 "Lead capture form for distributors and importers"
             ],
             "zh": [
@@ -163,6 +218,18 @@ PACKAGES = [
                 "以图片与短视频为主的品牌故事布局",
                 "原产地故事 / 制作过程 / 包装展示 / 图库模块",
                 "用于收集代理商与进口商信息的表单"
+            ]
+        },
+        "excluded": {
+            "en": [
+                "Professional photo/video shooting",
+                "Domain/hosting fees (billed by providers)",
+                "Paid ad campaigns (can be quoted separately)"
+            ],
+            "zh": [
+                "专业拍摄（照片/视频）",
+                "域名/主机费用（由供应商收取）",
+                "广告投放服务（可单独报价）"
             ]
         },
         "ai_options": {
@@ -179,27 +246,34 @@ PACKAGES = [
     {
         "id": "pkg_shop",
         "project_id": "shop",
-        "name": {
-            "en": "Export E-Commerce Shop",
-            "zh": "出口型独立商城"
-        },
-        "price": {
-            "en": "¥12,000+",
-            "zh": "¥12,000+"
-        },
+        "name": {"en": "Export E-Commerce Shop", "zh": "出口型独立商城"},
+        "price": {"en": "¥19,800+", "zh": "¥19,800+"},
+        "delivery": {"en": "3–5 weeks (depends on catalog size)", "zh": "3–5 周（取决于产品数量）"},
         "recommended": False,
         "bullets": {
             "en": [
                 "Based on: SkyLane Shop demo (basket + login + checkout)",
                 "Product catalog, shopping cart and demo checkout flow",
                 "User account area with sample orders",
-                "Ready for Stripe / PayPal / bank transfer integration"
+                "Ready for payment integration (Stripe/PayPal/bank transfer)"
             ],
             "zh": [
                 "基于：SkyLane 商城演示站（含购物车 / 登录 / 结算）",
                 "产品目录、购物车及演示结算流程",
                 "带示例订单的用户中心页面",
-                "可扩展接入 Stripe / PayPal / 银行转账等支付方式"
+                "可扩展接入支付（Stripe/PayPal/银行转账）"
+            ]
+        },
+        "excluded": {
+            "en": [
+                "Payment provider fees and business verification",
+                "Complex shipping/tax automation (quoted separately)",
+                "Large-scale product import/ERP sync (quoted separately)"
+            ],
+            "zh": [
+                "支付平台手续费及商户资质认证",
+                "复杂运费/税务自动化（需单独报价）",
+                "大规模商品导入/ERP 同步（需单独报价）"
             ]
         },
         "ai_options": {
@@ -215,6 +289,9 @@ PACKAGES = [
     },
 ]
 
+# -------------------------
+# Dashboard demo data
+# -------------------------
 DASHBOARD_SITES = [
     {
         "id": "factory",
@@ -244,7 +321,7 @@ DASHBOARD_SITES = [
         "name_zh": "Horizon 采购服务网站",
         "url": "https://sourcing.skylaneai.com/",
         "type": "Service",
-        "status": "building",
+        "status": "online",
         "leads_30d": 7,
         "ai_rfq": True,
         "ai_chat": False,
@@ -253,7 +330,7 @@ DASHBOARD_SITES = [
         "id": "shop",
         "name_en": "SkyLane Shop (B2C)",
         "name_zh": "SkyLane B2C 商城",
-        "url": "https://shop-demo.skylaneai.com/",
+        "url": "https://shop.skylaneai.com/",
         "type": "E-Commerce",
         "status": "online",
         "leads_30d": 9,
@@ -294,14 +371,10 @@ DASHBOARD_RECENT_LEADS = [
 
 
 def build_dashboard_summary(lang: str) -> dict:
-    """Prepare data for Export Command Center view."""
     total_sites = len(DASHBOARD_SITES)
     total_leads_30d = sum(s.get("leads_30d", 0) for s in DASHBOARD_SITES)
-    ai_enabled_sites = sum(
-        1 for s in DASHBOARD_SITES if s.get("ai_rfq") or s.get("ai_chat")
-    )
+    ai_enabled_sites = sum(1 for s in DASHBOARD_SITES if s.get("ai_rfq") or s.get("ai_chat"))
 
-    # Localize site names + AI labels
     sites_localized = []
     for site in DASHBOARD_SITES:
         s = dict(site)
@@ -312,13 +385,10 @@ def build_dashboard_summary(lang: str) -> dict:
             ai_labels.append("AI Smart RFQ" if lang == "en" else "AI 智能 RFQ")
         if site.get("ai_chat"):
             ai_labels.append("AI Chat" if lang == "en" else "AI 在线咨询")
-        s["ai_label_str"] = ", ".join(ai_labels) if ai_labels else (
-            "None" if lang == "en" else "暂无"
-        )
+        s["ai_label_str"] = ", ".join(ai_labels) if ai_labels else ("None" if lang == "en" else "暂无")
 
         sites_localized.append(s)
 
-    # Localize recent leads
     recent_leads = []
     for lead in DASHBOARD_RECENT_LEADS:
         l = dict(lead)
@@ -337,13 +407,7 @@ def build_dashboard_summary(lang: str) -> dict:
     }
 
 
-def get_lang(default="en"):
-    lang = request.args.get("lang", default)
-    return "zh" if lang and lang.lower() in ("zh", "cn", "zh-cn") else "en"
-
-
 def localize_projects(lang: str):
-    """Flatten bilingual desc into plain string for templates."""
     localized = []
     for p in PROJECTS:
         p_copy = dict(p)
@@ -353,38 +417,26 @@ def localize_projects(lang: str):
         localized.append(p_copy)
     return localized
 
+
 def localize_packages(lang: str):
-    """Return packages ready for display with localized text and demo links."""
     project_map = {p["id"]: p for p in PROJECTS}
     localized = []
+
     for pkg in PACKAGES:
         p = dict(pkg)
 
-        # Name & price
-        name_data = p.get("name")
-        if isinstance(name_data, dict):
-            p["display_name"] = name_data.get(lang, name_data.get("en")) or ""
-        else:
-            p["display_name"] = name_data or ""
+        # Localize
+        def pick(d, fallback=""):
+            if isinstance(d, dict):
+                return d.get(lang, d.get("en")) or fallback
+            return d or fallback
 
-        price_data = p.get("price")
-        if isinstance(price_data, dict):
-            p["display_price"] = price_data.get(lang, price_data.get("en")) or ""
-        else:
-            p["display_price"] = price_data or ""
-
-        # Bullets & AI options
-        bullets_data = p.get("bullets", {})
-        ai_data = p.get("ai_options", {})
-        if isinstance(bullets_data, dict):
-            p["display_bullets"] = bullets_data.get(lang, bullets_data.get("en", []))
-        else:
-            p["display_bullets"] = bullets_data or []
-
-        if isinstance(ai_data, dict):
-            p["display_ai_options"] = ai_data.get(lang, ai_data.get("en", []))
-        else:
-            p["display_ai_options"] = ai_data or []
+        p["display_name"] = pick(p.get("name"), "")
+        p["display_price"] = pick(p.get("price"), "")
+        p["display_delivery"] = pick(p.get("delivery"), "")
+        p["display_bullets"] = pick(p.get("bullets"), []) or []
+        p["display_excluded"] = pick(p.get("excluded"), []) or []
+        p["display_ai_options"] = pick(p.get("ai_options"), []) or []
 
         # Link to demo project
         proj = project_map.get(p.get("project_id"))
@@ -398,17 +450,11 @@ def localize_packages(lang: str):
             p["demo_icon"] = None
 
         localized.append(p)
+
     return localized
 
 
 def build_smart_rfq_prompt(data: dict, lang: str) -> str:
-    """
-    Build the user prompt for the RFQ expander.
-    data keys (all optional): company, buyer_name, email, country, product, quantity,
-                              incoterm, target_port, quality_level, certifications,
-                              packaging, notes
-    lang: "en" or "zh"
-    """
     if lang == "zh":
         base_instructions = """
 你是一名外贸手工具/一般工业品的资深业务员，擅长把客户的原始需求整理成结构化的询盘/报价单（RFQ）。
@@ -440,11 +486,10 @@ Requirements:
 Return the result as JSON with two string fields: rfq_en and rfq_zh.
 """
 
-    # Build a compact description from provided fields
     parts = []
 
-    def add_line(label: str, value_key: str):
-        value = data.get(value_key)
+    def add_line(label: str, key: str):
+        value = (data.get(key) or "").strip()
         if value:
             parts.append(f"{label}: {value}")
 
@@ -461,6 +506,7 @@ Return the result as JSON with two string fields: rfq_en and rfq_zh.
         add_line("认证或要求标准", "certifications")
         add_line("包装要求", "packaging")
         add_line("补充说明", "notes")
+        header = "客户提供的信息如下（可能不完整）：\n"
     else:
         add_line("Company", "company")
         add_line("Contact person", "buyer_name")
@@ -474,16 +520,12 @@ Return the result as JSON with two string fields: rfq_en and rfq_zh.
         add_line("Required certifications/standards", "certifications")
         add_line("Packaging requirements", "packaging")
         add_line("Extra notes", "notes")
+        header = "Buyer provided the following raw info (may be incomplete):\n"
 
     user_text = "\n".join(parts) if parts else "(no structured info provided)"
-
-    if lang == "zh":
-        return base_instructions + "\n\n客户提供的信息如下（可能不完整）：\n" + user_text
-    else:
-        return base_instructions + "\n\nBuyer provided the following raw info (may be incomplete):\n" + user_text
+    return base_instructions + "\n\n" + header + user_text
 
 
-# --- Simple knowledge base for AI chat (you can expand per client) ---
 AI_KB = {
     "agency_en": """
 SkyLane AI Studio is a small web studio focused on bilingual export websites for Chinese factories and trading companies.
@@ -507,7 +549,6 @@ SkyLane AI Studio（天航智网工作室）专注为中国工厂和外贸公司
 
 
 def build_ai_system_prompt(lang: str) -> str:
-    """Create the system prompt for the AI chat assistant."""
     if lang == "zh":
         kb = AI_KB["agency_zh"]
         return f"""
@@ -521,9 +562,8 @@ def build_ai_system_prompt(lang: str) -> str:
 - 主动引导他们提供产品类别、目标市场、预算等信息；
 - 不要谈论你是一个 AI 模型，只表现为网站顾问。
 """
-    else:
-        kb = AI_KB["agency_en"]
-        return f"""
+    kb = AI_KB["agency_en"]
+    return f"""
 You are the smart website consultant for SkyLane AI Studio.
 Always answer in clear, simple English unless the user explicitly uses Chinese.
 
@@ -537,9 +577,12 @@ Guidelines:
 """
 
 
-@app.route("/")
+# -------------------------
+# Routes
+# -------------------------
+@app.get("/")
 def index_pc():
-    lang = get_lang(default="en")
+    lang = get_lang(default=DEFAULT_LANG)
     return render_template(
         "index_pc.html",
         projects=localize_projects(lang),
@@ -551,10 +594,9 @@ def index_pc():
     )
 
 
-
-@app.route("/wechat")
+@app.get("/wechat")
 def index_wechat():
-    # Default to Chinese for WeChat
+    # Default to Chinese for WeChat, but can be switched by ?lang=en
     lang = get_lang(default="zh")
     return render_template(
         "index_wechat.html",
@@ -563,13 +605,28 @@ def index_wechat():
         lang=lang,
         is_wechat=True,
         enable_ai_chat=ENABLE_AI_CHAT,
+        enable_smart_rfq=ENABLE_SMART_RFQ,
     )
 
 
-@app.route("/contact", methods=["POST"])
+@app.get("/dashboard")
+def dashboard():
+    lang = get_lang(default=DEFAULT_LANG)
+    summary = build_dashboard_summary(lang)
+    return render_template(
+        "dashboard.html",
+        lang=lang,
+        is_wechat=False,
+        enable_ai_chat=ENABLE_AI_CHAT,
+        enable_smart_rfq=ENABLE_SMART_RFQ,
+        summary=summary,
+    )
+
+
+@app.post("/contact")
 def contact_submit():
-    name = request.form.get("name")
-    lang = request.form.get("lang", "en")
+    name = request.form.get("name") or ""
+    lang = request.form.get("lang") or get_lang(default=DEFAULT_LANG)
 
     if lang == "zh":
         flash(f"谢谢 {name}！您的需求已经发送，我会在24小时内回复。", "success")
@@ -578,53 +635,74 @@ def contact_submit():
 
     return redirect(url_for("index_pc", lang=lang))
 
-@app.route("/dashboard")
-def dashboard():
-    """
-    Export Command Center – internal style dashboard you can show to clients.
-    Later you can clone this per client and plug in real analytics.
-    """
-    lang = get_lang(default="en")
-    summary = build_dashboard_summary(lang)
 
-    return render_template(
-        "dashboard.html",
-        lang=lang,
-        is_wechat=False,          # PC-style layout
-        enable_ai_chat=ENABLE_AI_CHAT,
-        enable_smart_rfq=ENABLE_SMART_RFQ,
-        summary=summary,
-    )
+# -------------------------
+# Legal / compliance pages
+# -------------------------
+@app.get("/privacy")
+def privacy():
+    lang = get_lang(default=DEFAULT_LANG)
+    return render_template("privacy.html", lang=lang, is_wechat=False)
 
 
-@app.route("/api/smart-rfq", methods=["POST"])
+@app.get("/terms")
+def terms():
+    lang = get_lang(default=DEFAULT_LANG)
+    return render_template("terms.html", lang=lang, is_wechat=False)
+
+
+@app.get("/cookies")
+def cookies():
+    lang = get_lang(default=DEFAULT_LANG)
+    return render_template("cookies.html", lang=lang, is_wechat=False)
+
+
+# -------------------------
+# robots + sitemap (SEO basics)
+# -------------------------
+@app.get("/robots.txt")
+def robots_txt():
+    sitemap_url = url_for("sitemap_xml", _external=True)
+    body = "\n".join([
+        "User-agent: *",
+        "Allow: /",
+        f"Sitemap: {sitemap_url}",
+        ""
+    ])
+    return Response(body, mimetype="text/plain")
+
+
+@app.get("/sitemap.xml")
+def sitemap_xml():
+    pages = ["index_pc", "dashboard", "privacy", "terms", "cookies"]
+    urls = []
+
+    for endpoint in pages:
+        for lng in ("zh", "en"):
+            loc = url_for(endpoint, _external=True, lang=lng)
+            urls.append((loc, datetime.utcnow().date().isoformat()))
+
+    xml = ['<?xml version="1.0" encoding="UTF-8"?>',
+           '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
+    for loc, lastmod in urls:
+        xml.append("  <url>")
+        xml.append(f"    <loc>{loc}</loc>")
+        xml.append(f"    <lastmod>{lastmod}</lastmod>")
+        xml.append("  </url>")
+    xml.append("</urlset>")
+    return Response("\n".join(xml), mimetype="application/xml")
+
+
+@app.get("/health")
+def health():
+    return {"ok": True}
+
+
+# -------------------------
+# APIs
+# -------------------------
+@app.post("/api/smart-rfq")
 def api_smart_rfq():
-    """
-    Smart RFQ expander.
-
-    Expects JSON:
-    {
-      "company": "...",
-      "buyer_name": "...",
-      "email": "...",
-      "country": "...",
-      "product": "...",
-      "quantity": "...",
-      "incoterm": "...",
-      "target_port": "...",
-      "quality_level": "...",
-      "certifications": "...",
-      "packaging": "...",
-      "notes": "...",
-      "lang": "en" or "zh"
-    }
-
-    Returns JSON:
-    {
-      "rfq_en": "...",
-      "rfq_zh": "..."
-    }
-    """
     if not ENABLE_SMART_RFQ:
         return jsonify({"error": "Smart RFQ is disabled"}), 403
 
@@ -633,9 +711,8 @@ def api_smart_rfq():
 
     data = request.get_json(silent=True) or {}
     lang = data.get("lang", "en")
-    lang = "zh" if lang and lang.lower() in ("zh", "cn", "zh-cn") else "en"
+    lang = "zh" if (lang and str(lang).lower() in ("zh", "cn", "zh-cn", "zh-hans")) else "en"
 
-    # Build messages
     user_prompt = build_smart_rfq_prompt(data, lang)
 
     messages = [
@@ -652,49 +729,29 @@ def api_smart_rfq():
 
     try:
         completion = client.chat.completions.create(
-            model="gpt-4.1-mini",  # adjust model as needed
+            model="gpt-4.1-mini",
             messages=messages,
-            max_tokens=800,
+            max_tokens=900,
             temperature=0.4,
         )
-        raw = completion.choices[0].message.content
+        raw = (completion.choices[0].message.content or "").strip()
 
-        # Try to parse JSON result
         try:
             parsed = json.loads(raw)
-            rfq_en = parsed.get("rfq_en", "").strip()
-            rfq_zh = parsed.get("rfq_zh", "").strip()
+            rfq_en = (parsed.get("rfq_en") or "").strip()
+            rfq_zh = (parsed.get("rfq_zh") or "").strip()
         except Exception:
-            # Fallback: treat entire output as English RFQ; produce a simple CN placeholder
-            rfq_en = raw.strip()
-            rfq_zh = (
-                "（AI 输出未按 JSON 格式返回，这里为英文 RFQ 原文，请人工翻译或重新生成。）\n\n"
-                + rfq_en
-            )
+            rfq_en = raw
+            rfq_zh = "（AI 输出未按 JSON 格式返回，以下为英文原文，请人工翻译或重新生成。）\n\n" + rfq_en
 
-        return jsonify({
-            "rfq_en": rfq_en,
-            "rfq_zh": rfq_zh
-        })
+        return jsonify({"rfq_en": rfq_en, "rfq_zh": rfq_zh})
 
     except Exception as e:
         return jsonify({"error": "Smart RFQ generation failed", "detail": str(e)}), 500
 
 
-# === AI CHAT API ENDPOINT ===
-@app.route("/api/ai-chat", methods=["POST"])
+@app.post("/api/ai-chat")
 def api_ai_chat():
-    """
-    Expects JSON:
-    {
-      "messages": [
-        {"role": "user", "content": "Hi, I need a factory website..."},
-        {"role": "assistant", "content": "..."}  # optional history
-      ],
-      "lang": "en" or "zh"
-    }
-    Returns: {"reply": "..."} or error message.
-    """
     if not ENABLE_AI_CHAT:
         return jsonify({"error": "AI chat is disabled"}), 403
 
@@ -704,35 +761,34 @@ def api_ai_chat():
     data = request.get_json(silent=True) or {}
     user_messages = data.get("messages", [])
     lang = data.get("lang", "en")
-    lang = "zh" if lang in ("zh", "cn", "zh-cn") else "en"
+    lang = "zh" if str(lang).lower() in ("zh", "cn", "zh-cn", "zh-hans") else "en"
 
     if not user_messages:
         return jsonify({"error": "No messages provided"}), 400
 
     system_prompt = build_ai_system_prompt(lang)
 
-    # Build full message list for the model
     messages = [{"role": "system", "content": system_prompt}]
     for m in user_messages:
         role = m.get("role", "user")
         content = m.get("content", "")
-        if not content:
-            continue
-        messages.append({"role": role, "content": content})
+        if content:
+            messages.append({"role": role, "content": content})
 
     try:
         completion = client.chat.completions.create(
-            model="gpt-4.1-mini",   # you can change model name if needed
+            model="gpt-4.1-mini",
             messages=messages,
-            max_tokens=400,
+            max_tokens=450,
             temperature=0.4,
         )
-        reply = completion.choices[0].message.content
+        reply = completion.choices[0].message.content or ""
         return jsonify({"reply": reply})
     except Exception as e:
-        # For production you may want to log the exception properly
         return jsonify({"error": "AI chat request failed", "detail": str(e)}), 500
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    port = int(os.environ.get("PORT", "5000"))
+    debug = os.environ.get("FLASK_DEBUG", "0") == "1"
+    app.run(host="0.0.0.0", port=port, debug=debug)

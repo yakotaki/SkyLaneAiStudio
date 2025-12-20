@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}{{ '服务条款' if lang=='zh' else 'Terms of Service' }} – SkyLane AI Studio{% endblock %}
+
+{% block content %}
+<section class="py-5">
+  <div class="container py-3">
+    <h1 class="fw-bold mb-4">{{ '服务条款' if lang=='zh' else 'Terms of Service' }}</h1>
+
+    {% if lang == 'zh' %}
+      <p class="text-muted">最后更新：2025-12-20</p>
+      <h5 class="fw-semibold mt-4">服务范围</h5>
+      <p>SkyLane AI Studio 提供网站设计与开发服务。具体交付内容以双方确认的方案/合同为准。</p>
+
+      <h5 class="fw-semibold mt-4">报价与付款</h5>
+      <p>网页上的价格为参考价或起步价，最终价格以需求范围、交付周期和功能复杂度为准。付款方式与节点以合同/订单为准。</p>
+
+      <h5 class="fw-semibold mt-4">客户责任</h5>
+      <ul>
+        <li>按时提供必要资料（公司信息、产品资料、图片、证书等）。</li>
+        <li>确保提供内容拥有合法使用权。</li>
+      </ul>
+
+      <h5 class="fw-semibold mt-4">第三方服务</h5>
+      <p>域名、主机、支付、CRM、分析工具等第三方服务通常由第三方直接收费。相关费用不包含在默认报价中，除非明确写入方案。</p>
+
+      <h5 class="fw-semibold mt-4">免责声明</h5>
+      <p>我们会提供合理的技术支持与优化建议，但不对搜索引擎排名、广告效果或商业转化做结果保证。</p>
+    {% else %}
+      <p class="text-muted">Last updated: 2025-12-20</p>
+      <h5 class="fw-semibold mt-4">Scope</h5>
+      <p>SkyLane AI Studio provides website design and development services. Exact deliverables are defined in the agreed proposal/contract.</p>
+
+      <h5 class="fw-semibold mt-4">Pricing and payments</h5>
+      <p>Website prices are indicative or “starting from”. Final pricing depends on scope, delivery timeline, and complexity. Payment terms follow the contract/order.</p>
+
+      <h5 class="fw-semibold mt-4">Client responsibilities</h5>
+      <ul>
+        <li>Provide necessary materials on time (company info, product data, photos, certificates, etc.).</li>
+        <li>Ensure you have rights to use the provided content.</li>
+      </ul>
+
+      <h5 class="fw-semibold mt-4">Third-party services</h5>
+      <p>Domains, hosting, payments, CRM, analytics, and other third-party tools are billed by providers unless explicitly included in the proposal.</p>
+
+      <h5 class="fw-semibold mt-4">Disclaimer</h5>
+      <p>We provide best-effort technical work and recommendations but do not guarantee search ranking, ad performance, or business outcomes.</p>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

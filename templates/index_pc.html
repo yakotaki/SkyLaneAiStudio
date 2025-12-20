@@ -199,6 +199,90 @@
     </div>
 </section>
 
+
+<section id="pricing" class="py-5 bg-light">
+  <div class="container py-4">
+    <div class="text-center mb-5">
+      <span class="section-label">{% if lang == 'en' %}Packages{% else %}套餐报价{% endif %}</span>
+      <h2 class="fw-bold display-6">{% if lang == 'en' %}Website Packages{% else %}建站服务套餐{% endif %}</h2>
+      <p class="text-muted mb-0">
+        {% if lang == 'en' %}
+          Clear scope, delivery time, and what is included/excluded. You can start from a demo and upgrade it to your real site.
+        {% else %}
+          明确范围、交付周期、包含与不包含内容。可基于演示站快速落地并升级为您的正式官网。
+        {% endif %}
+      </p>
+    </div>
+
+    <div class="row g-4">
+      {% for pkg in packages %}
+      <div class="col-md-6 col-lg-3">
+        <div class="card h-100 border-0 shadow-sm pricing-card {% if pkg.recommended %}border border-warning{% endif %}">
+          <div class="card-body p-4">
+            <div class="d-flex justify-content-between align-items-start">
+              <h5 class="fw-bold mb-2">{{ pkg.display_name }}</h5>
+              {% if pkg.recommended %}
+                <span class="badge bg-warning text-dark">{% if lang == 'en' %}Recommended{% else %}推荐{% endif %}</span>
+              {% endif %}
+            </div>
+            <div class="fs-3 fw-bold mb-3 text-accent">{{ pkg.display_price }}</div>
+
+            <div class="small text-muted mb-3">
+              <div class="fw-semibold text-dark">{% if lang == 'en' %}Delivery time{% else %}交付周期{% endif %}</div>
+              <div>{{ pkg.display_delivery }}</div>
+            </div>
+
+            <div class="mb-3">
+              <div class="fw-semibold">{% if lang == 'en' %}What's included{% else %}包含内容{% endif %}</div>
+              <ul class="small text-muted mb-0">
+                {% for item in pkg.display_bullets %}
+                  <li>{{ item }}</li>
+                {% endfor %}
+              </ul>
+            </div>
+
+            <div class="mb-3">
+              <div class="fw-semibold">{% if lang == 'en' %}What's excluded{% else %}不包含{% endif %}</div>
+              <ul class="small text-muted mb-0">
+                {% for item in pkg.display_excluded %}
+                  <li>{{ item }}</li>
+                {% endfor %}
+              </ul>
+            </div>
+
+            {% if pkg.display_ai_options and pkg.display_ai_options|length > 0 %}
+            <div class="mb-3">
+              <div class="fw-semibold">{% if lang == 'en' %}Optional AI features{% else %}AI 可选项{% endif %}</div>
+              <ul class="small text-muted mb-0">
+                {% for item in pkg.display_ai_options %}
+                  <li>{{ item }}</li>
+                {% endfor %}
+              </ul>
+            </div>
+            {% endif %}
+
+            {% if pkg.demo_url %}
+            <a class="btn btn-outline-dark btn-sm w-100 mt-2" href="{{ pkg.demo_url }}" target="_blank" rel="noopener">
+              {% if lang == 'en' %}Open Demo{% else %}打开演示站{% endif %}
+            </a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="mt-4 small text-muted">
+      {% if lang == 'en' %}
+        Note: Hosting/domain and third-party tools are billed separately unless included in a maintenance plan.
+      {% else %}
+        说明：域名/主机及第三方工具费用通常单独计费，除非包含在运维套餐内。
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+
 <section id="payments" class="py-5">
   <div class="container py-4">
     <div class="text-center mb-5">
@@ -365,21 +449,21 @@
                                 {% if lang == 'en' %}Website Type{% else %}网站类型{% endif %}
                             </label>
                             <select class="form-select" id="siteType" onchange="calculatePrice()">
-                                <option value="3500">
+                                <option value="4800">
                                     {% if lang == 'en' %}
-                                        Simple Landing Page (¥3,500)
+                                        Simple Landing Page (¥4,800)
                                     {% else %}
-                                        简单落地页 (¥3,500)
+                                        简单落地页 (¥4,800)
                                     {% endif %}
                                 </option>
-                                <option value="6000" selected>
+                                <option value="9800" selected>
                                     {% if lang == 'en' %}
-                                        Corporate B2B Site (¥6,000)
+                                        Corporate B2B Site (¥9,800)
                                     {% else %}
-                                        企业 B2B 官网 (¥6,000)
+                                        企业 B2B 官网 (¥9,800)
                                     {% endif %}
                                 </option>
-                                <option value="12000">
+                                <option value="19800">
                                     {% if lang == 'en' %}
                                         E-Commerce Shop (¥12,000)
                                     {% else %}
@@ -394,27 +478,27 @@
                                 {% if lang == 'en' %}Add-ons{% else %}增值服务{% endif %}
                             </label>
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="1500" id="optSEO" onchange="calculatePrice()">
+                                <input class="form-check-input" type="checkbox" value="2500" id="optSEO" onchange="calculatePrice()">
                                 <label class="form-check-label" for="optSEO">
                                     {% if lang == 'en' %}
-                                        Google SEO Setup (+¥1,500)
+                                        Google/Bing Indexing & Basic SEO Setup (+¥2,500)
                                     {% else %}
                                         谷歌 SEO 设置 (+¥1,500)
                                     {% endif %}
                                 </label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="2000" id="optCopy" onchange="calculatePrice()">
+                                <input class="form-check-input" type="checkbox" value="3000" id="optCopy" onchange="calculatePrice()">
                                 <label class="form-check-label" for="optCopy">
                                     {% if lang == 'en' %}
-                                        Professional English Copywriting (+¥2,000)
+                                        Professional Professional English Copywriting (+¥3,000)
                                     {% else %}
                                         专业英文文案撰写 (+¥2,000)
                                     {% endif %}
                                 </label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="1000" id="optChat" onchange="calculatePrice()">
+                                <input class="form-check-input" type="checkbox" value="1200" id="optChat" onchange="calculatePrice()">
                                 <label class="form-check-label" for="optChat">
                                     {% if lang == 'en' %}
                                         Live Chat / WhatsApp Integration (+¥1,000)
@@ -430,7 +514,11 @@
                             <span class="text-muted">
                                 {% if lang == 'en' %}Estimated Total:{% else %}预估总价：{% endif %}
                             </span>
-                            <span class="calc-total">¥<span id="totalPrice">6,000</span></span>
+                            <span class="calc-total">¥<span id="totalPrice">9,800</span></span>
+                        <div class="small text-muted mt-2">
+                          {% if lang == 'en' %}Estimated infra (domain + hosting/year):{% else %}预计基础运维成本（域名+主机/年）：{% endif %}
+                          ¥<span id="infraPrice">0</span>
+                        </div>
                         </div>
                     </form>
                 </div>
@@ -494,6 +582,14 @@
 {% block scripts %}
 <script>
     function calculatePrice() {
+        const USD_CNY = 7.2;                   // Estimate
+        const domainUsdPerYear = 12.0;         // Typical .com renewal estimate
+        const hostingUsdPerMonth = {
+            4800: 7,   // landing -> Render Starter (estimate)
+            9800: 7,   // b2b -> Render Starter (estimate)
+            19800: 25  // shop -> Render Standard (estimate)
+        };
+
         let base = parseInt(document.getElementById('siteType').value);
         let total = base;
 
@@ -501,7 +597,13 @@
         if (document.getElementById('optCopy').checked) total += parseInt(document.getElementById('optCopy').value);
         if (document.getElementById('optChat').checked) total += parseInt(document.getElementById('optChat').value);
 
+        // Infra estimate (domain + hosting/year)
+        const hostUsd = hostingUsdPerMonth[base] || 10;
+        const infraCnyYear = Math.round((hostUsd * 12 + domainUsdPerYear) * USD_CNY);
+
         document.getElementById('totalPrice').innerText = total.toLocaleString();
+        const infraEl = document.getElementById('infraPrice');
+        if (infraEl) infraEl.innerText = infraCnyYear.toLocaleString();
     }
 </script>
 {% endblock %}

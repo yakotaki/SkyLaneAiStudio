@@ -362,13 +362,13 @@
                         {% if lang == 'en' %}Website Type{% else %}网站类型{% endif %}
                     </label>
                     <select class="form-select form-select-sm" id="wxSiteType" onchange="calcWxPrice()">
-                        <option value="3500">
+                        <option value="4800">
                             {% if lang == 'en' %}Simple Landing (¥3,500){% else %}简单展示页 (¥3,500){% endif %}
                         </option>
-                        <option value="6000" selected>
+                        <option value="9800" selected>
                             {% if lang == 'en' %}B2B Corporate Site (¥6,000){% else %}企业B2B官网 (¥6,000){% endif %}
                         </option>
-                        <option value="12000">
+                        <option value="19800">
                             {% if lang == 'en' %}E-commerce Store (¥12,000){% else %}独立站商城 (¥12,000){% endif %}
                         </option>
                     </select>
@@ -395,7 +395,7 @@
                     <span class="small fw-bold text-muted">
                         {% if lang == 'en' %}Estimated total:{% else %}预估总价：{% endif %}
                     </span>
-                    <span class="h4 fw-bold text-primary mb-0">¥<span id="wxTotalPrice">6,000</span></span>
+                    <span class="h4 fw-bold text-primary mb-0">¥<span id="wxTotalPrice">9,800</span></span>
                 </div>
             </form>
         </div>
@@ -478,17 +478,27 @@
 
 <script>
     function calcWxPrice() {
+        const USD_CNY = 7.2;                   // Estimate
+        const domainUsdPerYear = 12.0;         // Typical .com renewal estimate
+        const hostingUsdPerMonth = {
+            4800: 7,
+            9800: 7,
+            19800: 25
+        };
+
         let base = parseInt(document.getElementById('wxSiteType').value);
         let total = base;
 
-        if (document.getElementById('wxOptSEO').checked) {
-            total += parseInt(document.getElementById('wxOptSEO').value);
-        }
-        if (document.getElementById('wxOptCopy').checked) {
-            total += parseInt(document.getElementById('wxOptCopy').value);
-        }
+        if (document.getElementById('wxOptSEO').checked) total += parseInt(document.getElementById('wxOptSEO').value);
+        if (document.getElementById('wxOptCopy').checked) total += parseInt(document.getElementById('wxOptCopy').value);
+        if (document.getElementById('wxOptChat') && document.getElementById('wxOptChat').checked) total += parseInt(document.getElementById('wxOptChat').value);
+
+        const hostUsd = hostingUsdPerMonth[base] || 10;
+        const infraCnyYear = Math.round((hostUsd * 12 + domainUsdPerYear) * USD_CNY);
 
         document.getElementById('wxTotalPrice').innerText = total.toLocaleString();
+        const infraEl = document.getElementById('wxInfraPrice');
+        if (infraEl) infraEl.innerText = infraCnyYear.toLocaleString();
     }
 </script>
 {% endblock %}

@@ -152,17 +152,12 @@
 
                 <!-- Language switch -->
                 <li class="nav-item dropdown ms-2">
-                    <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-label="Language">
                         <i class="fa-solid fa-language"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
-                        {% if is_wechat %}
-                            <li><a class="dropdown-item" href="{{ url_for('index_wechat', lang='en') }}">English (WeChat)</a></li>
-                            <li><a class="dropdown-item" href="{{ url_for('index_wechat', lang='zh') }}">中文 (微信)</a></li>
-                        {% else %}
-                            <li><a class="dropdown-item" href="{{ url_for('index_pc', lang='en') }}">English (PC)</a></li>
-                            <li><a class="dropdown-item" href="{{ url_for('index_pc', lang='zh') }}">中文 (PC)</a></li>
-                        {% endif %}
+                        <li><a class="dropdown-item" href="{{ switch_lang_url('en') }}">{{ 'English (WeChat)' if is_wechat else 'English (PC)' }}</a></li>
+                        <li><a class="dropdown-item" href="{{ switch_lang_url('zh') }}">{{ '中文 (微信)' if is_wechat else '中文 (PC)' }}</a></li>
                     </ul>
                 </li>
             </ul>
@@ -173,7 +168,24 @@
 
 <main>
     {% block content %}{% endblock %}
+
 </main>
+
+<footer class="py-4 border-top bg-light">
+  <div class="container d-flex flex-column flex-md-row justify-content-between align-items-start gap-3">
+    <div class="small text-muted">
+      <div class="fw-semibold text-dark">SkyLane AI Studio</div>
+      <div>{{ '专注为工厂/外贸公司搭建双语出口网站。' if lang=='zh' else 'Bilingual export websites for factories and trading companies.' }}</div>
+      <div class="mt-1">{{ '提示：页面上的“运维成本”仅为域名+主机的估算值，实际费用以供应商报价为准。' if lang=='zh' else 'Note: “infra cost” is an estimate (domain + hosting). Final costs depend on your provider.' }}</div>
+    </div>
+    <div class="d-flex flex-wrap gap-3">
+      <a class="small text-decoration-none" href="{{ url_for('privacy', lang=lang) }}">{{ '隐私政策' if lang=='zh' else 'Privacy' }}</a>
+      <a class="small text-decoration-none" href="{{ url_for('terms', lang=lang) }}">{{ '服务条款' if lang=='zh' else 'Terms' }}</a>
+      <a class="small text-decoration-none" href="{{ url_for('cookies', lang=lang) }}">{{ 'Cookie 政策' if lang=='zh' else 'Cookies' }}</a>
+    </div>
+  </div>
+</footer>
+
 
 <!-- === Global promo modal: Free WeChat Mini Program for next 10 customers === -->
 <div class="modal fade" id="promoModal" tabindex="-1" aria-labelledby="promoModalLabel" aria-hidden="true">

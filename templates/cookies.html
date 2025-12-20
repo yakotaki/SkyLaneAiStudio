@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Cookie 政策' if lang=='zh' else 'Cookie Policy' }} – SkyLane AI Studio{% endblock %}
+
+{% block content %}
+<section class="py-5">
+  <div class="container py-3">
+    <h1 class="fw-bold mb-4">{{ 'Cookie 政策' if lang=='zh' else 'Cookie Policy' }}</h1>
+
+    {% if lang == 'zh' %}
+      <p class="text-muted">最后更新：2025-12-20</p>
+      <p>我们可能使用 Cookie 或类似技术来支持网站的基本功能（例如语言偏好、表单体验）以及进行基础访问分析。</p>
+      <h5 class="fw-semibold mt-4">您可以如何管理 Cookie</h5>
+      <p>您可以在浏览器设置中删除或禁用 Cookie。禁用后，部分功能（例如语言记忆）可能无法正常工作。</p>
+    {% else %}
+      <p class="text-muted">Last updated: 2025-12-20</p>
+      <p>We may use cookies (or similar technologies) to support basic site functionality (e.g., language preference, form experience) and basic analytics.</p>
+      <h5 class="fw-semibold mt-4">How to manage cookies</h5>
+      <p>You can delete or disable cookies in your browser settings. Disabling cookies may affect some features (e.g., remembering language).</p>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

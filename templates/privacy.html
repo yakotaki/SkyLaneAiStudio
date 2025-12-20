@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}{{ '隐私政策' if lang=='zh' else 'Privacy Policy' }} – SkyLane AI Studio{% endblock %}
+
+{% block content %}
+<section class="py-5">
+  <div class="container py-3">
+    <h1 class="fw-bold mb-4">{{ '隐私政策' if lang=='zh' else 'Privacy Policy' }}</h1>
+
+    {% if lang == 'zh' %}
+      <p class="text-muted">最后更新：2025-12-20</p>
+      <h5 class="fw-semibold mt-4">我们收集哪些信息</h5>
+      <ul>
+        <li>当您提交联系表单时：姓名、邮箱、公司信息、项目描述等您主动填写的内容。</li>
+        <li>基础访问数据：浏览器类型、访问页面、访问时间等（用于网站运行与安全分析）。</li>
+      </ul>
+
+      <h5 class="fw-semibold mt-4">我们如何使用信息</h5>
+      <ul>
+        <li>回复您的询盘、提供报价与项目沟通。</li>
+        <li>改进网站体验与服务质量。</li>
+      </ul>
+
+      <h5 class="fw-semibold mt-4">AI 功能说明（如启用）</h5>
+      <p>如果您使用站内 AI 咨询或 AI 智能 RFQ 功能，您输入的内容可能会被发送至第三方 AI 服务用于生成回复。请避免提交敏感信息（如身份证号、银行卡号、商业机密等）。</p>
+
+      <h5 class="fw-semibold mt-4">信息共享</h5>
+      <p>除非为提供服务或法律要求，我们不会向无关第三方出售或共享您的个人信息。可能的服务提供方包括：网站托管、邮件发送、分析工具与 AI 服务。</p>
+
+      <h5 class="fw-semibold mt-4">数据保存</h5>
+      <p>我们会在实现业务目的所需的合理期限内保存信息，或遵循适用法律的要求。</p>
+
+      <h5 class="fw-semibold mt-4">联系我们</h5>
+      <p>如需删除或查询您的信息，请通过网站联系表单与我们联系。</p>
+    {% else %}
+      <p class="text-muted">Last updated: 2025-12-20</p>
+      <h5 class="fw-semibold mt-4">Information we collect</h5>
+      <ul>
+        <li>When you submit the contact form: name, email, company details, and any content you provide.</li>
+        <li>Basic access data: browser type, pages visited, timestamps (for operations and security).</li>
+      </ul>
+
+      <h5 class="fw-semibold mt-4">How we use information</h5>
+      <ul>
+        <li>To respond to inquiries, provide quotations, and communicate about your project.</li>
+        <li>To improve the website experience and service quality.</li>
+      </ul>
+
+      <h5 class="fw-semibold mt-4">AI features (if enabled)</h5>
+      <p>If you use the on-site AI chat or Smart RFQ features, your input may be sent to third-party AI services to generate replies. Please avoid submitting sensitive information (IDs, bank details, trade secrets, etc.).</p>
+
+      <h5 class="fw-semibold mt-4">Sharing</h5>
+      <p>We do not sell your personal data. We may share data with service providers needed to run the website and deliver services (hosting, email, analytics, AI services), or when legally required.</p>
+
+      <h5 class="fw-semibold mt-4">Retention</h5>
+      <p>We retain information for a reasonable period necessary to fulfill business purposes, or as required by applicable law.</p>
+
+      <h5 class="fw-semibold mt-4">Contact</h5>
+      <p>To request access or deletion, please contact us via the website contact form.</p>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}
