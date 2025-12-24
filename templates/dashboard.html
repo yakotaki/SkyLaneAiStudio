@@ -1,295 +1,205 @@
 {% extends "base.html" %}
-
-{% block title %}
-    {% if lang == 'zh' %}
-        出口指挥中心 – SkyLane AI Studio
-    {% else %}
-        Export Command Center – SkyLane AI Studio
-    {% endif %}
-{% endblock %}
-
-{% block extra_head %}
-<style>
-    .dash-hero {
-        background: radial-gradient(circle at top left, #1d4ed8 0, #0f172a 45%, #020617 100%);
-        color: white;
-        padding: 3rem 0 2.5rem 0;
-    }
-    .dash-hero h1 {
-        letter-spacing: -0.03em;
-    }
-    .stat-card {
-        border-radius: 1rem;
-        border: none;
-        box-shadow: 0 15px 30px -15px rgba(15, 23, 42, 0.35);
-        background: linear-gradient(135deg, #0f172a, #111827);
-        color: #e5e7eb;
-    }
-    .stat-card small {
-        color: #9ca3af;
-    }
-    .stat-number {
-        font-size: 1.8rem;
-        font-weight: 800;
-    }
-    .dash-table th {
-        font-size: 0.75rem;
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
-        color: #6b7280;
-        border-top: none;
-    }
-    .dash-table td {
-        vertical-align: middle;
-        font-size: 0.9rem;
-    }
-    .badge-ai {
-        font-size: 0.7rem;
-    }
-    .badge-status-online {
-        background: #bbf7d0;
-        color: #166534;
-    }
-    .badge-status-building {
-        background: #fef3c7;
-        color: #92400e;
-    }
-</style>
-{% endblock %}
+{% block title %}{{ "出口指挥中心" if lang=="zh" else "Export Command Center" }} – SkyLane AI Studio{% endblock %}
 
 {% block content %}
+<div class="container py-4">
 
-<section class="dash-hero">
-    <div class="container">
-        <div class="row align-items-center g-4">
-            <div class="col-lg-7">
-                <span class="section-label text-uppercase">
-                    {% if lang == 'en' %}
-                        Export Command Center
-                    {% else %}
-                        出口型网站控制台
-                    {% endif %}
-                </span>
-                <h1 class="display-5 fw-bold mb-3">
-                    {% if lang == 'en' %}
-                        One place to see all your export websites
-                    {% else %}
-                        一眼看清所有出口官网的运行情况
-                    {% endif %}
-                </h1>
-                <p class="mb-0" style="max-width: 520px;">
-                    {% if lang == 'en' %}
-                        Use this dashboard to monitor live sites, leads, and AI activity.
-                        For each client we can provide a simplified version with their own data.
-                    {% else %}
-                        通过这个控制台，您可以快速查看所有官网上线状态、最近询盘以及 AI 工具使用情况。
-                        每个客户都可以拥有自己的精简版控制台。
-                    {% endif %}
-                </p>
-            </div>
-            <div class="col-lg-5">
-                <div class="row g-3">
-                    <div class="col-4">
-                        <div class="card stat-card p-3 text-center">
-                            <small class="text-uppercase">
-                                {% if lang == 'en' %}Live sites{% else %}已上线网站{% endif %}
-                            </small>
-                            <div class="stat-number mt-2">{{ summary.total_sites }}</div>
-                        </div>
-                    </div>
-                    <div class="col-4">
-                        <div class="card stat-card p-3 text-center">
-                            <small class="text-uppercase">
-                                {% if lang == 'en' %}Leads (30 days){% else %}30天询盘数{% endif %}
-                            </small>
-                            <div class="stat-number mt-2">{{ summary.total_leads_30d }}</div>
-                        </div>
-                    </div>
-                    <div class="col-4">
-                        <div class="card stat-card p-3 text-center">
-                            <small class="text-uppercase">
-                                {% if lang == 'en' %}Sites with AI{% else %}启用 AI 站点{% endif %}
-                            </small>
-                            <div class="stat-number mt-2">{{ summary.ai_enabled_sites }}</div>
-                        </div>
-                    </div>
-                </div>
-                <p class="small mt-3 mb-0 text-end text-white-50">
-                    {% if lang == 'en' %}
-                        Demo data for illustration. Real projects get live analytics.
-                    {% else %}
-                        当前为演示数据，真实项目可接入实时统计。
-                    {% endif %}
-                </p>
-            </div>
-        </div>
+  <div class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-3">
+    <div>
+      <div class="section-label">{{ "运营看板" if lang=="zh" else "Operations" }}</div>
+      <h1 class="h3 fw-bold mb-1">{{ "出口指挥中心" if lang=="zh" else "Export Command Center" }}</h1>
+      <div class="text-secondary small">
+        {{ "用于汇总演示站点、询盘与 AI 功能开关。数据可后续接入真实 CRM/消息系统。" if lang=="zh"
+           else "Summary view of demo sites, leads, and AI feature flags. Can later be connected to real CRM/messaging." }}
+      </div>
     </div>
-</section>
-
-<section class="py-5">
-    <div class="container">
-        <div class="row g-4">
-            <!-- Sites overview -->
-            <div class="col-lg-7">
-                <div class="card border-0 shadow-sm h-100">
-                    <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0">
-                            {% if lang == 'en' %}Websites overview{% else %}网站总览{% endif %}
-                        </h5>
-                        <span class="badge bg-indigo-100 text-indigo-700" style="font-size: 0.75rem;">
-                            {% if lang == 'en' %}
-                                Demo client view
-                            {% else %}
-                                客户可见示例界面
-                            {% endif %}
-                        </span>
-                    </div>
-                    <div class="table-responsive">
-                        <table class="table align-middle mb-0 dash-table">
-                            <thead>
-                                <tr>
-                                    <th>{% if lang == 'en' %}Site{% else %}网站{% endif %}</th>
-                                    <th>{% if lang == 'en' %}Type{% else %}类型{% endif %}</th>
-                                    <th>{% if lang == 'en' %}Status{% else %}状态{% endif %}</th>
-                                    <th class="text-end">{% if lang == 'en' %}Leads (30d){% else %}30天询盘{% endif %}</th>
-                                    <th>{% if lang == 'en' %}AI{% else %}AI 功能{% endif %}</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            {% for s in summary.sites %}
-                                <tr>
-                                    <td>
-                                        <div class="fw-semibold">{{ s.display_name }}</div>
-                                        <div class="small text-muted">
-                                            {{ s.url }}
-                                        </div>
-                                    </td>
-                                    <td>{{ s.type }}</td>
-                                    <td>
-                                        {% if s.status == 'online' %}
-                                            <span class="badge badge-status-online">
-                                                {% if lang == 'en' %}Online{% else %}已上线{% endif %}
-                                            </span>
-                                        {% elif s.status == 'building' %}
-                                            <span class="badge badge-status-building">
-                                                {% if lang == 'en' %}Building{% else %}制作中{% endif %}
-                                            </span>
-                                        {% else %}
-                                            <span class="badge bg-secondary">
-                                                {{ s.status }}
-                                            </span>
-                                        {% endif %}
-                                    </td>
-                                    <td class="text-end fw-semibold">
-                                        {{ s.leads_30d }}
-                                    </td>
-                                    <td>
-                                        <span class="badge bg-light text-dark badge-ai">
-                                            {{ s.ai_label_str }}
-                                        </span>
-                                    </td>
-                                    <td class="text-end">
-                                        <a href="{{ s.url }}" class="btn btn-sm btn-outline-primary" target="_blank">
-                                            {% if lang == 'en' %}Open{% else %}访问{% endif %}
-                                        </a>
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Recent leads -->
-            <div class="col-lg-5">
-                <div class="card border-0 shadow-sm mb-4">
-                    <div class="card-header bg-white border-0">
-                        <h5 class="mb-0">
-                            {% if lang == 'en' %}Recent inquiries (demo){% else %}最近询盘（示例）{% endif %}
-                        </h5>
-                    </div>
-                    <div class="list-group list-group-flush">
-                        {% for lead in summary.recent_leads %}
-                        <div class="list-group-item">
-                            <div class="d-flex justify-content-between">
-                                <div>
-                                    <div class="fw-semibold">{{ lead.company }}</div>
-                                    <div class="small text-muted">
-                                        {{ lead.country }} · {{ lead.site_name }}
-                                    </div>
-                                </div>
-                                <div class="text-end">
-                                    <div class="small text-muted">{{ lead.date }}</div>
-                                    <div class="small fw-semibold">{{ lead.budget }}</div>
-                                </div>
-                            </div>
-                            <p class="small mb-0 mt-2 text-muted">
-                                {{ lead.project }}
-                            </p>
-                        </div>
-                        {% endfor %}
-                    </div>
-                </div>
-
-                <div class="card border-0 shadow-sm">
-                    <div class="card-body">
-                        <h6 class="fw-bold mb-2">
-                            {% if lang == 'en' %}
-                                How clients use this dashboard
-                            {% else %}
-                                客户可以如何使用这个控制台
-                            {% endif %}
-                        </h6>
-                        <ul class="small text-muted mb-0">
-                            {% if lang == 'en' %}
-                                <li>See which site brings the most inquiries this month.</li>
-                                <li>Check which sites already have AI tools enabled.</li>
-                                <li>Decide where to invest next: SEO, more content, or AI upgrade.</li>
-                            {% else %}
-                                <li>了解本月哪个网站带来的询盘最多。</li>
-                                <li>查看哪些站点已经接入 AI 工具。</li>
-                                <li>决定下一步重点投入方向：SEO、内容优化还是 AI 升级。</li>
-                            {% endif %}
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Note to prospects -->
-        <div class="row mt-5">
-            <div class="col-lg-10">
-                <div class="alert alert-primary border-0 shadow-sm">
-                    <div class="d-flex">
-                        <div class="me-3">
-                            <i class="fa-solid fa-gauge-high fa-lg"></i>
-                        </div>
-                        <div>
-                            <strong>
-                                {% if lang == 'en' %}
-                                    Want a dashboard like this for your factory?
-                                {% else %}
-                                    想为您的工厂也做一个这样的控制台吗？
-                                {% endif %}
-                            </strong>
-                            <p class="small mb-0 mt-1">
-                                {% if lang == 'en' %}
-                                    We can provide a simplified Export Command Center for your company
-                                    with real analytics, inquiry tracking and AI RFQ tools connected to your own site.
-                                {% else %}
-                                    我们可以为您企业制作专属的“出口指挥中心”，
-                                    显示真实访问数据、询盘记录，并接入专属 AI 询盘助手和 RFQ 工具。
-                                {% endif %}
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
+    <div class="d-flex gap-2">
+      <a class="btn btn-outline-secondary btn-sm" href="{{ url_for('index_pc', lang=lang) }}#contact">
+        <i class="fa-solid fa-paper-plane me-1"></i>{{ "新建询盘" if lang=="zh" else "New inquiry" }}
+      </a>
+      <a class="btn btn-dark btn-sm" href="{{ url_for('index_pc', lang=lang) }}#packages">
+        <i class="fa-solid fa-tag me-1"></i>{{ "查看套餐" if lang=="zh" else "View packages" }}
+      </a>
     </div>
-</section>
+  </div>
 
+  <!-- KPI cards -->
+  <div class="row g-3 mb-4">
+    <div class="col-md-4">
+      <div class="p-3 rounded-4 border bg-white h-100">
+        <div class="d-flex align-items-center justify-content-between">
+          <div class="text-secondary small">{{ "站点数量" if lang=="zh" else "Sites" }}</div>
+          <i class="fa-solid fa-globe text-accent"></i>
+        </div>
+        <div class="display-6 fw-bold">{{ summary.total_sites }}</div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="p-3 rounded-4 border bg-white h-100">
+        <div class="d-flex align-items-center justify-content-between">
+          <div class="text-secondary small">{{ "近 30 天询盘" if lang=="zh" else "Leads (30d)" }}</div>
+          <i class="fa-solid fa-inbox text-accent"></i>
+        </div>
+        <div class="display-6 fw-bold">{{ summary.total_leads_30d }}</div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="p-3 rounded-4 border bg-white h-100">
+        <div class="d-flex align-items-center justify-content-between">
+          <div class="text-secondary small">{{ "AI 功能启用站点" if lang=="zh" else "AI-enabled sites" }}</div>
+          <i class="fa-solid fa-wand-magic-sparkles text-accent"></i>
+        </div>
+        <div class="display-6 fw-bold">{{ summary.ai_enabled_sites }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="row g-3">
+    <div class="col-lg-3">
+      <div class="p-2 rounded-4 border bg-white">
+        <div class="nav flex-lg-column nav-pills gap-1" id="dashTabs" role="tablist">
+          <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#tabSites" type="button" role="tab">
+            <i class="fa-solid fa-sitemap me-2"></i>{{ "站点" if lang=="zh" else "Sites" }}
+          </button>
+          <button class="nav-link" data-bs-toggle="pill" data-bs-target="#tabLeads" type="button" role="tab">
+            <i class="fa-solid fa-list-check me-2"></i>{{ "询盘" if lang=="zh" else "Leads" }}
+          </button>
+          <button class="nav-link" data-bs-toggle="pill" data-bs-target="#tabOps" type="button" role="tab">
+            <i class="fa-solid fa-gears me-2"></i>{{ "运营规范" if lang=="zh" else "Ops" }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-9">
+      <div class="tab-content" id="dashTabsContent">
+
+        <!-- Sites -->
+        <div class="tab-pane fade show active" id="tabSites" role="tabpanel">
+          <div class="p-3 rounded-4 border bg-white">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <div class="fw-bold">{{ "演示站点" if lang=="zh" else "Demo sites" }}</div>
+              <div class="text-secondary small">{{ "点击打开" if lang=="zh" else "Click to open" }}</div>
+            </div>
+
+            <div class="row g-2">
+              {% for s in summary.sites %}
+              <div class="col-12">
+                <div class="p-3 rounded-4 border bg-body-tertiary">
+                  <div class="d-flex flex-wrap justify-content-between align-items-start gap-2">
+                    <div>
+                      <div class="fw-semibold">{{ s.display_name }}</div>
+                      <div class="text-secondary small">
+                        <span class="badge text-bg-light border me-1">{{ s.type }}</span>
+                        <span class="badge text-bg-light border me-1">{{ s.status }}</span>
+                        <span class="badge text-bg-light border">{{ "30 天询盘" if lang=="zh" else "Leads 30d" }}: {{ s.leads_30d }}</span>
+                      </div>
+                      <div class="text-secondary small mt-1">
+                        <i class="fa-solid fa-robot me-1"></i>{{ "AI：" if lang=="zh" else "AI: " }}{{ s.ai_label_str }}
+                      </div>
+                    </div>
+                    <div class="d-flex gap-2">
+                      <a class="btn btn-sm btn-outline-primary" href="{{ s.url }}" target="_blank" rel="noopener">
+                        <i class="fa-solid fa-arrow-up-right-from-square me-1"></i>{{ "打开" if lang=="zh" else "Open" }}
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Leads -->
+        <div class="tab-pane fade" id="tabLeads" role="tabpanel">
+          <div class="p-3 rounded-4 border bg-white">
+            <div class="fw-bold mb-2">{{ "最近询盘" if lang=="zh" else "Recent leads" }}</div>
+
+            <div class="table-responsive">
+              <table class="table align-middle">
+                <thead>
+                  <tr>
+                    <th>{{ "日期" if lang=="zh" else "Date" }}</th>
+                    <th>{{ "站点" if lang=="zh" else "Site" }}</th>
+                    <th>{{ "公司" if lang=="zh" else "Company" }}</th>
+                    <th>{{ "需求" if lang=="zh" else "Project" }}</th>
+                    <th>{{ "预算" if lang=="zh" else "Budget" }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for l in summary.recent_leads %}
+                  <tr>
+                    <td class="text-secondary small">{{ l.date }}</td>
+                    <td>{{ l.site_name }}</td>
+                    <td>
+                      <div class="fw-semibold">{{ l.company }}</div>
+                      <div class="text-secondary small">{{ l.country }}</div>
+                    </td>
+                    <td class="text-secondary small">{{ l.project }}</td>
+                    <td class="text-secondary small">{{ l.budget }}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+
+            <div class="text-secondary small">
+              {{ "提示：如接入 WhatsApp/在线聊天收件箱，可将消息自动归档到对应站点与客户。"
+                 if lang=="zh"
+                 else "Tip: with WhatsApp/online chat inbox integration, messages can be auto-filed by site and customer." }}
+            </div>
+          </div>
+        </div>
+
+        <!-- Ops -->
+        <div class="tab-pane fade" id="tabOps" role="tabpanel">
+          <div class="p-3 rounded-4 border bg-white">
+            <div class="fw-bold mb-2">{{ "运营规则（摘要）" if lang=="zh" else "Ops rules (summary)" }}</div>
+
+            <div class="row g-3">
+              <div class="col-md-6">
+                <div class="p-3 rounded-4 border bg-body-tertiary h-100">
+                  <div class="fw-semibold mb-1"><i class="fa-solid fa-phone me-2 text-accent"></i>{{ "电话" if lang=="zh" else "Phone" }}</div>
+                  <div class="text-secondary small">
+                    {{ "服务时间：周一–周三 9:00–12:00；周四–周五 9:00–18:00（北京时间）。未接来电：1 个工作日内回电。"
+                       if lang=="zh"
+                       else "Working hours: Mon–Wed 09:00–12:00; Thu–Fri 09:00–18:00 (China time). Missed calls: call back within 1 business day." }}
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="p-3 rounded-4 border bg-body-tertiary h-100">
+                  <div class="fw-semibold mb-1"><i class="fa-solid fa-language me-2 text-accent"></i>{{ "语言范围" if lang=="zh" else "Languages" }}</div>
+                  <div class="text-secondary small">
+                    {{ "Starter 3 种语言；Business 5 种语言；Pro 可按需扩展（不限）。"
+                       if lang=="zh"
+                       else "Starter 3 languages; Business 5; Pro unlimited (scope-based)." }}
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-12">
+                <div class="p-3 rounded-4 border bg-body-tertiary">
+                  <div class="fw-semibold mb-1"><i class="fa-solid fa-envelope me-2 text-accent"></i>{{ "公司邮箱" if lang=="zh" else "Company email" }}</div>
+                  <div class="text-secondary small">
+                    {{ "询盘表单可发送到客户公司邮箱；也可选择在网站页脚展示邮箱（可选）。"
+                       if lang=="zh"
+                       else "Inquiry forms can send to the client’s company email; the email can also be displayed on the site footer (optional)." }}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>
 {% endblock %}

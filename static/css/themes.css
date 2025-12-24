@@ -1,0 +1,187 @@
+/* themes.css
+   3 visual styles + small corner list (theme switcher).
+   Works by overriding existing CSS variables and a few core selectors.
+   No backend changes; selection stored in localStorage.
+*/
+
+/* ---------- Switcher UI ---------- */
+.theme-switcher{
+  position: fixed;
+  right: 16px;
+  bottom:96px;
+  z-index: 1055;
+  font-family: inherit;
+}
+.theme-switcher__toggle{
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  border: 1px solid rgba(15,23,42,0.14);
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(10px);
+  border-radius: 999px;
+  padding: .55rem .75rem;
+  box-shadow: 0 10px 28px rgba(15,23,42,0.10);
+  color: #0f172a;
+  cursor: pointer;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.theme-switcher__toggle:hover{ transform: translateY(-1px); box-shadow: 0 14px 34px rgba(15,23,42,0.14); }
+.theme-switcher__toggle:active{ transform: translateY(0); }
+
+.theme-switcher__panel{
+  margin-top: 10px;
+  width: 240px;
+  border: 1px solid rgba(15,23,42,0.14);
+  border-radius: 16px;
+  background: rgba(255,255,255,0.96);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 18px 45px rgba(15,23,42,0.16);
+  padding: 10px;
+  display: none;
+}
+.theme-switcher.is-open .theme-switcher__panel{ display: block; }
+.theme-switcher__title{
+  font-size: .85rem;
+  font-weight: 800;
+  color: rgba(15,23,42,0.90);
+  margin: 4px 6px 10px;
+}
+.theme-switcher__item{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  padding: .55rem .6rem;
+  border-radius: 12px;
+  border: 1px solid rgba(15,23,42,0.10);
+  background: #fff;
+  cursor: pointer;
+  color: rgba(15,23,42,0.92);
+  font-weight: 700;
+  transition: background .12s ease, transform .12s ease, border-color .12s ease;
+  text-align: left;
+  margin-bottom: 8px;
+}
+.theme-switcher__item:hover{
+  background: rgba(245,158,11,0.10);
+  border-color: rgba(245,158,11,0.35);
+  transform: translateY(-1px);
+}
+.theme-switcher__item.is-active{
+  background: rgba(245,158,11,0.12);
+  border-color: rgba(245,158,11,0.55);
+}
+.theme-switcher__hint{
+  margin-top: 8px;
+  padding: 6px 6px 2px;
+  font-size: .8rem;
+  color: rgba(100,116,139,0.95);
+}
+
+.dot{ width: 10px; height: 10px; border-radius: 999px; display: inline-block; }
+.dot--classic{
+  background: linear-gradient(135deg, #22c55e 0%, #f59e0b 55%, #38bdf8 100%);
+}
+.dot--warm{
+  background: linear-gradient(135deg, #ef4444 0%, #f97316 55%, #f472b6 100%);
+}
+.dot--midnight{
+  background: linear-gradient(135deg, #a78bfa 0%, #22d3ee 55%, #60a5fa 100%);
+}
+
+
+html[data-theme="classic"]{
+  --primary:  #0f172a;
+  --light:    #f8fafc;          /* page base */
+  --surface:  #ffffff;          /* cards */
+  --surface2: #f1f5f9;          /* muted blocks */
+
+  --accent:   #22c55e;          /* green */
+  --accent2:  #f59e0b;          /* amber */
+  --accent3:  #38bdf8;          /* sky */
+
+  --ring:     rgba(34,197,94,.22);
+  --border:   rgba(15,23,42,.10);
+}
+html[data-theme="classic"] body{
+  background:
+    radial-gradient(900px 320px at 10% 0%, rgba(34,197,94,.12), rgba(255,255,255,0)),
+    radial-gradient(900px 320px at 90% 0%, rgba(56,189,248,.10), rgba(255,255,255,0)),
+    linear-gradient(180deg, rgba(245,158,11,.08) 0%, rgba(255,255,255,0) 48%),
+    var(--light) !important;
+}
+
+
+/* ---------- Theme variables (light themes) ---------- */
+html[data-theme="warm"]{
+  --primary:  #1f2937;
+  --light:    #fff7ed;
+  --surface:  #ffffff;
+  --surface2: #ffedd5;
+
+  --accent:   #ef4444;          /* red */
+  --accent2:  #f97316;          /* orange */
+  --accent3:  #f472b6;          /* pink */
+
+  --ring:     rgba(239,68,68,.22);
+  --border:   rgba(31,41,55,.12);
+}
+html[data-theme="warm"] body{
+  background:
+    radial-gradient(900px 320px at 18% 0%, rgba(239,68,68,.14), rgba(255,255,255,0)),
+    radial-gradient(900px 320px at 82% 0%, rgba(244,114,182,.10), rgba(255,255,255,0)),
+    linear-gradient(180deg, rgba(249,115,22,.10) 0%, rgba(255,255,255,0) 52%),
+    var(--light) !important;
+}
+
+
+/* ---------- Midnight (dark) theme ---------- */
+html[data-theme="midnight"]{
+  --primary:  #0b1220;
+  --light:    #0b1220;          /* page base */
+  --surface:  rgba(15,23,42,.92);
+  --surface2: rgba(15,23,42,.72);
+
+  --accent:   #a78bfa;          /* purple */
+  --accent2:  #22d3ee;          /* cyan */
+  --accent3:  #60a5fa;          /* blue */
+
+  --ring:     rgba(167,139,250,.22);
+  --border:   rgba(148,163,184,.18);
+}
+html[data-theme="midnight"] body{
+  background:
+    radial-gradient(900px 320px at 14% 0%, rgba(34,211,238,.14), rgba(11,18,32,0)),
+    radial-gradient(900px 320px at 86% 0%, rgba(167,139,250,.18), rgba(11,18,32,0)),
+    linear-gradient(180deg, rgba(96,165,250,.10) 0%, rgba(11,18,32,0) 55%),
+    #0b1220 !important;
+  color: #e2e8f0 !important;
+}
+/* Surfaces */
+.bg-white{ background: var(--surface) !important; }
+.bg-body-tertiary{ background: var(--surface2) !important; }
+.border, .card, .navbar{ border-color: var(--border) !important; }
+
+/* Accent buttons/links */
+.btn-accent{
+  background: var(--accent) !important;
+  border-color: var(--accent) !important;
+  color: #fff !important;
+}
+.btn-accent:hover{
+  filter: brightness(0.95);
+  box-shadow: 0 0 0 6px var(--ring) !important;
+}
+
+/* Add a subtle second accent on hover for nav links */
+.navbar .nav-link:hover{
+  background: rgba(0,0,0,0.04);
+  box-shadow: inset 0 -2px 0 0 var(--accent2);
+}
+
+/* “Pretty” highlight for small badges or pills if you use them */
+.badge-accent{
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 55%, var(--accent3) 100%) !important;
+  color: #fff !important;
+}

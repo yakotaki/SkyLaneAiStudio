@@ -1,504 +1,182 @@
 {% extends "base.html" %}
-{% block title %}SkyLane AI Studio · 天航智网工作室{% endblock %}
-
-{% block extra_head %}
-<style>
-    :root {
-        --wx-bg: #f5f7fa;
-        --wx-xrimary: #4f46e5;
-        --wx-accent: #f59e0b;
-        --wx-dark: #1e293b;
-    }
-
-    body {
-        background-color: var(--wx-bg);
-        font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
-        padding-bottom: 60px;
-    }
-
-    .wx-hero {
-        background: linear-gradient(135deg, #0f172a 0%, #312e81 100%);
-        color: white;
-        padding: 3rem 1.5rem 6rem 1.5rem;
-        border-bottom-left-radius: 30px;
-        border-bottom-right-radius: 30px;
-        position: relative;
-        overflow: visible;
-        z-index: 1;
-    }
-
-    .wx-hero::before {
-        content: '';
-        position: absolute;
-        top: -50px; right: -50px;
-        width: 200px; height: 200px;
-        background: rgba(255,255,255,0.05);
-        border-radius: 50%;
-    }
-
-    .wx-card {
-        background: white;
-        border-radius: 16px;
-        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
-        border: none;
-        margin-bottom: 1.5rem;
-        overflow: hidden;
-    }
-
-    .wx-card-header {
-        padding: 1rem 1.25rem;
-        border-bottom: 1px solid #f1f5f9;
-        font-weight: 700;
-        color: var(--wx-dark);
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-    }
-
-    .wx-overlap-container {
-        position: relative;
-        z-index: 2;
-        margin-top: -3rem;
-        padding: 0 1rem;
-    }
-
-    .btn-wx-action {
-        background: var(--wx-primary);
-        color: white;
-        border: none;
-        border-radius: 12px;
-        padding: 0.8rem;
-        font-weight: 600;
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.3);
-    }
-    .btn-wx-action:active {
-        transform: scale(0.98);
-        background: #4338ca;
-    }
-
-    .project-item {
-        display: flex;
-        align-items: center;
-        padding: 1rem;
-        border-bottom: 1px solid #f8fafc;
-    }
-    .project-item:last-child { border-bottom: none; }
-
-    .project-icon {
-        width: 48px;
-        height: 48px;
-        border-radius: 10px;
-        background: #e0e7ff;
-        color: var(--wx-primary);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.2rem;
-        margin-right: 1rem;
-        flex-shrink: 0;
-    }
-
-    .wx-bottom-bar {
-        position: fixed;
-        bottom: 0; left: 0; right: 0;
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(10px);
-        padding: 0.8rem 1rem;
-        box-shadow: 0 -4px 6px -1px rgba(0,0,0,0.05);
-        z-index: 1000;
-        display: flex;
-        gap: 1rem;
-    }
-
-    /* Small adjustment so Smart RFQ widget looks good in H5 card flow */
-    #smartRfqCard {
-        margin-bottom: 0;
-        box-shadow: none;
-        border-radius: 12px;
-    }
-</style>
-{% endblock %}
+{% block title %}SkyLane AI Studio{% endblock %}
 
 {% block content %}
-<div class="wx-hero">
-    <div class="d-flex align-items-center mb-2 gap-2">
-        <span class="badge bg-warning text-dark rounded-pill px-3 py-1 fw-bold" style="font-size: 0.7rem;">
-            {% if lang == 'en' %}Python Powered{% else %}Python 技术驱动{% endif %}
-        </span>
-        <span class="badge bg-info text-dark rounded-pill px-3 py-1 fw-bold" style="font-size: 0.7rem;">
-            {% if lang == 'en' %}AI Ready{% else %}支持 AI 加持{% endif %}
-        </span>
+<div class="p-3 rounded-4 border bg-body-tertiary hero-card">
+    <div class="fw-bold fs-4 mb-1">{{ "销售 · 管理 · 增长" if lang=="zh" else "Sell. Manage. Grow." }}</div>
+    <div class="text-secondary mb-2">
+      {{ "支持手机与电脑端访问；支持中文/英文/多语言。" if lang=="zh" else "Mobile + PC ready. CN/EN/multi-language support." }}
     </div>
-    <h1 class="fw-bold mb-2">
-        {% if lang == 'en' %}
-            Export Website<br>Specialists
-        {% else %}
-            外贸独立站<br>建设专家
-        {% endif %}
-    </h1>
-    <p class="opacity-75 small mb-0" style="max-width: 85%;">
-        {% if lang == 'en' %}
-            We build clean, fast, bilingual websites for factories and trading companies — now with optional AI tools for RFQ and online consulting.
-        {% else %}
-            专注为工厂和外贸公司搭建中英双语网站，支持接入 AI 询盘助手、智能 RFQ 等增值功能。
-        {% endif %}
-    </p>
-</div>
-
-<div class="wx-overlap-container">
-
-    <!-- Feature highlights -->
-    <div class="wx-card">
-        <div class="p-3 d-flex justify-content-between align-items-center">
-            <div class="text-center flex-fill">
-                <div class="mb-2 text-primary"><i class="fa-solid fa-code fa-lg"></i></div>
-                <div class="small fw-bold text-dark">
-                    {% if lang == 'en' %}Fast Build{% else %}极速建站{% endif %}
-                </div>
-            </div>
-            <div class="text-center flex-fill border-start border-end">
-                <div class="mb-2 text-primary"><i class="fa-brands fa-google fa-lg"></i></div>
-                <div class="small fw-bold text-dark">
-                    {% if lang == 'en' %}Google SEO{% else %}谷歌SEO{% endif %}
-                </div>
-            </div>
-            <div class="text-center flex-fill">
-                <div class="mb-2 text-primary"><i class="fa-solid fa-wand-magic-sparkles fa-lg"></i></div>
-                <div class="small fw-bold text-dark">
-                    {% if lang == 'en' %}AI Ready{% else %}AI 加值{% endif %}
-                </div>
-            </div>
-        </div>
+    <div class="small">
+      <div>{{ support_policy.hours }}</div>
+      <div class="text-secondary">{{ support_policy.missed_calls }}</div>
     </div>
+  </div>
 
-    <!-- Demos -->
-    <div class="wx-card">
-        <div class="wx-card-header">
-            <i class="fa-solid fa-layer-group text-warning"></i>
-            <span>
-                {% if lang == 'en' %}Showcase Demos{% else %}示例网站{% endif %}
-            </span>
+  <div class="pt-4" id="addons">
+    <div class="fw-bold mb-2">{{ "增值选项" if lang=="zh" else "Add-ons" }}</div>
+    {% for a in addons %}
+      <div class="p-3 rounded-4 border bg-white mb-2">
+        <div class="d-flex justify-content-between">
+          <div class="fw-semibold">{{ a.display_name }}</div>
+          <div class="badge text-bg-light border">+{{ a.price }}</div>
         </div>
-        <div class="d-flex flex-column">
-            {% for project in projects %}
-            <div class="project-item">
-                <div class="project-icon">
-                    <i class="fa-solid {{ project.icon }}"></i>
-                </div>
-                <div class="flex-grow-1">
-                    <h6 class="mb-0 fw-bold text-dark" style="font-size: 0.95rem;">{{ project.title }}</h6>
-                    <p class="text-muted small mb-0 text-truncate" style="max-width: 180px;">{{ project.desc }}</p>
-                </div>
-                <a href="{{ project.url }}" class="btn btn-sm btn-light text-primary fw-bold rounded-pill px-3">
-                    {% if lang == 'en' %}View{% else %}预览{% endif %}
-                </a>
-            </div>
-            {% endfor %}
-        </div>
+        <div class="text-secondary small mt-1">{{ a.display_desc }}</div>
+      </div>
+    {% endfor %}
+    <div class="text-secondary small mt-2">
+      {{ "在线聊天/WhatsApp 接入包含网页收件箱面板（浏览器回复），适合卖家在中国使用。" if lang=="zh"
+         else "Online Chat/WhatsApp add-on includes a web inbox dashboard (reply in browser), suitable for sellers in China." }}
     </div>
+  </div>
 
-    <!-- Packages & Pricing (linked to demos) -->
-    <div class="wx-card" id="pricing">
-        <div class="wx-card-header">
-            <i class="fa-solid fa-tags text-warning"></i>
-            <span>
-                {% if lang == 'en' %}Packages & Pricing{% else %}网站套餐与报价{% endif %}
-            </span>
-        </div>
-        <div class="p-3">
-            {% for pkg in packages %}
-            <div class="p-3 rounded-3 mb-3 border {% if pkg.recommended %}border-primary position-relative{% endif %}"
-                 style="background: {% if pkg.recommended %}#eff6ff{% else %}#f9fafb{% endif %};">
-                {% if pkg.recommended %}
-                <span class="position-absolute top-0 end-0 badge bg-primary m-2" style="font-size:0.6rem;">
-                    {% if lang == 'en' %}Recommended{% else %}推荐{% endif %}
-                </span>
-                {% endif %}
+  <div class="pt-4" id="contact">
+    <div class="fw-bold mb-2">{{ "联系与报价" if lang=="zh" else "Contact & Quote" }}</div>
+    <form method="post" action="{{ url_for('contact_submit') }}" class="p-3 rounded-4 border bg-body-tertiary hero-card">
+      <input type="hidden" name="lang" value="{{ lang }}"/>
 
-                <div class="d-flex justify-content-between align-items-center mb-1">
-                    <span class="fw-bold text-dark" style="font-size: 0.9rem;">
-                        {{ pkg.display_name }}
-                    </span>
-                    <span class="text-primary fw-bold">{{ pkg.display_price }}</span>
-                </div>
+      <label class="form-label">{{ "姓名" if lang=="zh" else "Name" }}</label>
+      <input class="form-control mb-2" name="name" required>
 
-                {% if pkg.demo_title %}
-                <p class="small text-muted mb-1">
-                    {% if lang == 'en' %}
-                        Based on: {{ pkg.demo_title }}
-                    {% else %}
-                        基于演示站点：{{ pkg.demo_title }}
-                    {% endif %}
-                </p>
-                {% endif %}
+      <label class="form-label">{{ "公司（可选）" if lang=="zh" else "Company (optional)" }}</label>
+      <input class="form-control mb-2" name="company">
 
-                <ul class="mb-2 small text-muted ps-3">
-                    {% for item in pkg.display_bullets[:3] %}
-                    <li>{{ item }}</li>
-                    {% endfor %}
-                </ul>
+      <label class="form-label">{{ "邮箱（可选）" if lang=="zh" else "Email (optional)" }}</label>
+      <input class="form-control mb-2" name="email" type="email">
 
-                {% if pkg.demo_url %}
-                <a href="{{ pkg.demo_url }}" class="btn btn-light btn-sm w-100 mb-1">
-                    {% if lang == 'en' %}Open demo{% else %}查看演示站{% endif %}
-                </a>
-                {% endif %}
+      <label class="form-label">{{ "微信/电话（可选）" if lang=="zh" else "WeChat / Phone (optional)" }}</label>
+      <input class="form-control mb-2" name="wechat_or_phone">
 
-                {% if pkg.display_ai_options %}
-                <p class="small text-primary mb-0">
-                    {% if lang == 'en' %}AI options:{% else %}AI 可选服务：{% endif %}
-                    {{ pkg.display_ai_options | join(' · ') }}
-                </p>
-                {% endif %}
-            </div>
-            {% endfor %}
+      <label class="form-label">{{ "需求说明" if lang=="zh" else "Message" }}</label>
+      <textarea class="form-control mb-3" name="message" rows="4"></textarea>
 
-            <p class="small text-muted mt-1 mb-0">
-                {% if lang == 'en' %}
-                    Final price depends on content, languages and AI options. Use the calculator below or contact us on WeChat.
-                {% else %}
-                    最终价格会根据具体页面数量、语言版本以及 AI 功能选择进行调整。可先用下方估算器预估，或直接微信联系。
-                {% endif %}
-            </p>
-        </div>
-    </div>
+      <button class="btn btn-primary w-100" type="submit">{{ "提交" if lang=="zh" else "Submit" }}</button>
 
-    <!-- Banking & Payment Options (WeChat view) -->
-    <div class="wx-card" id="payments">
-    <div class="wx-card-header">
-        <i class="fa-solid fa-credit-card text-warning"></i>
-        <span>
-        {% if lang == 'en' %}Banking & Payment{% else %}收款与支付{% endif %}
-        </span>
-    </div>
-    <div class="p-3">
-        <p class="small text-muted mb-3">
-        {% if lang == 'en' %}
-            For export projects we usually combine classic bank transfer with 1–2 online options,
-            so your buyers can choose what is easiest for them.
-        {% else %}
-            对外贸网站来说，一般会以银行电汇为主，再配合 1–2 个在线收款方式，
-            让客户选择最方便的付款方式。
-        {% endif %}
-        </p>
+      <div class="text-secondary small mt-2">
+        {{ "我们会在 1 个工作日内回复。" if lang=="zh" else "We will reply within 1 business day." }}
+      </div>
+    </form>
+  </div>
 
-        <div class="mb-3">
-        <h6 class="fw-bold mb-1">
-            {% if lang == 'en' %}Bank transfer (T/T){% else %}银行电汇（T/T）{% endif %}
-        </h6>
-        <p class="small text-muted mb-0">
-            {% if lang == 'en' %}
-            Standard for larger B2B orders. Orders are placed via the site, and you send a proforma
-            invoice with your USD / EUR / CNY bank details.
-            {% else %}
-            适合金额较大的 B2B 订单。客户通过网站下单后，由您发送含有美元 / 欧元 / 人民币账号的形式发票。
-            {% endif %}
-        </p>
-        </div>
 
-        <div class="mb-3">
-        <h6 class="fw-bold mb-1">
-            {% if lang == 'en' %}PayPal & Wise{% else %}PayPal / Wise{% endif %}
-        </h6>
-        <p class="small text-muted mb-0">
-            {% if lang == 'en' %}
-            Very convenient for samples and small orders. We help you show clear instructions on the site
-            and connect the workflow (order → email → PayPal / Wise link).
-            {% else %}
-            适合样品或小额订单，可在网站上清楚写明付款步骤，并结合邮件发送 PayPal / Wise 链接。
-            {% endif %}
-        </p>
-        </div>
-
-        <div class="mb-2">
-        <h6 class="fw-bold mb-1">
-            {% if lang == 'en' %}Card / Wallet gateways{% else %}银行卡 / 钱包支付{% endif %}
-        </h6>
-        <p class="small text-muted mb-0">
-            {% if lang == 'en' %}
-            For full online shops we can integrate card payments via Stripe and coordinate cross-border
-            WeChat Pay / Alipay with partners. This is optional and quoted separately.
-            {% else %}
-            若需要完整独立商城，可通过 Stripe 接入信用卡支付，并与合作方对接跨境微信支付 / 支付宝，
-            作为可选增值服务单独报价。
-            {% endif %}
-        </p>
-        </div>
-
-        <hr class="my-3">
-
-        <p class="small text-muted mb-2">
-        {% if lang == 'en' %}
-            In our demos, payments are simulated (no real charges). In real projects, we configure
-            the flow according to your bank accounts and compliance requirements.
-        {% else %}
-            在演示网站中，付款流程仅为模拟（不会真实扣款）；实际项目中，我们会根据您的账户情况
-            和合规要求进行定制配置。
-        {% endif %}
-        </p>
-
-        <a href="#contact-area" class="btn btn-light w-100">
-        {% if lang == 'en' %}Talk about payment setup{% else %}咨询收款方案{% endif %}
+  <!-- Demos -->
+  <section id="demos" class="pt-4">
+    <h2 class="h5 fw-bold mb-2">{{ "演示站" if lang=="zh" else "Demos" }}</h2>
+    <div class="row g-3">
+      {% for p in projects %}
+      <div class="col-12">
+        <a class="d-block p-3 rounded-4 border bg-white text-decoration-none" href="{{ p.url }}" target="_blank">
+          <div class="fw-semibold">{{ p.name }}</div>
+          <div class="text-secondary small">{{ p.desc }}</div>
         </a>
+      </div>
+      {% endfor %}
     </div>
-    </div>
+  </section>
 
-    <!-- Cost Estimator -->
-    <div class="wx-card" id="calculator">
-        <div class="wx-card-header">
-            <i class="fa-solid fa-calculator text-warning"></i>
-            <span>
-                {% if lang == 'en' %}Cost Estimator{% else %}费用估算器 (Calculator){% endif %}
-            </span>
+  <!-- Packages -->
+  <section id="packages" class="pt-4">
+    <h2 class="h5 fw-bold mb-2">{{ "套餐" if lang=="zh" else "Packages" }}</h2>
+    <div class="row g-3">
+      {% for pkg in packages %}
+      <div class="col-12">
+        <div class="p-3 rounded-4 border bg-white">
+          <div class="d-flex justify-content-between align-items-start">
+            <div class="fw-semibold">{{ pkg.display_name }}</div>
+            <div class="badge text-bg-light border">{{ pkg.display_price }}</div>
+          </div>
+          <div class="text-secondary small mt-1">{{ pkg.display_delivery }}</div>
         </div>
-        <div class="p-4">
-            <form id="wxCalcForm">
-                <div class="mb-3">
-                    <label class="small fw-bold text-muted mb-1">
-                        {% if lang == 'en' %}Website Type{% else %}网站类型{% endif %}
-                    </label>
-                    <select class="form-select form-select-sm" id="wxSiteType" onchange="calcWxPrice()">
-                        <option value="4800">
-                            {% if lang == 'en' %}Simple Landing (¥3,500){% else %}简单展示页 (¥3,500){% endif %}
-                        </option>
-                        <option value="9800" selected>
-                            {% if lang == 'en' %}B2B Corporate Site (¥6,000){% else %}企业B2B官网 (¥6,000){% endif %}
-                        </option>
-                        <option value="19800">
-                            {% if lang == 'en' %}E-commerce Store (¥12,000){% else %}独立站商城 (¥12,000){% endif %}
-                        </option>
-                    </select>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- Calculator -->
+  <section id="calculator" class="pt-4">
+    <h2 class="h5 fw-bold mb-2">{{ "费用估算" if lang=="zh" else "Cost Estimator" }}</h2>
+    <div class="p-3 rounded-4 border bg-white">
+      <label class="form-label fw-semibold" for="calcPackage">{{ "选择套餐" if lang=="zh" else "Select package" }}</label>
+      <select class="form-select mb-3" id="calcPackage">
+        {% for pkg in packages %}
+          <option value="{{ pkg.id }}" data-price="{{ pkg.display_price }}">{{ pkg.display_name }} ({{ pkg.display_price }})</option>
+        {% endfor %}
+      </select>
+
+
+          <!-- Language tier -->
+          <div class="fw-semibold mt-3 mb-2">{{ "语言等级" if lang=="zh" else "Language tier" }}</div>
+          <div class="border rounded-3 p-3 bg-light-subtle mb-3">
+            {% for t in language_tiers %}
+            <label class="d-flex gap-2 align-items-start mb-2">
+              <input class="form-check-input mt-1" type="radio" name="language_tier" value="{{ t.id }}"
+                     {% if t.id == "starter" %}checked{% endif %} data-add="{{ t.add_price }}">
+              <div>
+                <div class="fw-semibold">{{ t.display_name }}</div>
+                <div class="small text-secondary">
+                  {% if lang=="zh" %}
+                    最多 {{ t.max_lang }} 种语言 · +¥{{ t.add_price }}
+                  {% else %}
+                    Up to {{ t.max_lang }} languages · +¥{{ t.add_price }}
+                  {% endif %}
                 </div>
-                <div class="mb-3">
-                    <label class="small fw-bold text-muted mb-1">
-                        {% if lang == 'en' %}Add-ons{% else %}增值服务{% endif %}
-                    </label>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="1500" id="wxOptSEO" onchange="calcWxPrice()">
-                        <label class="form-check-label small" for="wxOptSEO">
-                            {% if lang == 'en' %}Google SEO (+¥1,500){% else %}谷歌SEO优化 (+¥1,500){% endif %}
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="2000" id="wxOptCopy" onchange="calcWxPrice()">
-                        <label class="form-check-label small" for="wxOptCopy">
-                            {% if lang == 'en' %}English copywriting (+¥2,000){% else %}英文文案撰写 (+¥2,000){% endif %}
-                        </label>
-                    </div>
-                </div>
-                <hr class="my-3">
-                <div class="d-flex justify-content-between align-items-center">
-                    <span class="small fw-bold text-muted">
-                        {% if lang == 'en' %}Estimated total:{% else %}预估总价：{% endif %}
-                    </span>
-                    <span class="h4 fw-bold text-primary mb-0">¥<span id="wxTotalPrice">9,800</span></span>
-                </div>
-            </form>
-        </div>
+              </div>
+            </label>
+            {% endfor %}
+            <div class="alert alert-warning small mt-2 mb-0">{{ banking_service_note }}</div>
+          </div>
+
+
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="addonSeo" data-fee="1500">
+        <label class="form-check-label" for="addonSeo">{{ "搜索引擎 SEO 基础设置 (+¥1,500)" if lang=="zh" else "Search Engine SEO Setup (+¥1,500)" }}</label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="addonCopy" data-fee="2000">
+        <label class="form-check-label" for="addonCopy">{{ "专业语言文案撰写 (+¥2,000)" if lang=="zh" else "Professional Language Copywriting (+¥2,000)" }}</label>
+      </div>
+      <div class="form-check mb-3">
+        <input class="form-check-input" type="checkbox" id="addonChat" data-fee="1000">
+        <label class="form-check-label" for="addonChat">{{ "在线聊天 / WhatsApp 接入 (+¥1,000)" if lang=="zh" else "Online Chat / WhatsApp Integration (+¥1,000)" }}</label>
+      </div>
+
+      <div class="fw-semibold">{{ "估算合计" if lang=="zh" else "Estimated total" }}：</div>
+      <div class="h3 fw-bold mb-0" id="calcTotal">—</div>
+      <div class="text-secondary small mt-2">
+        {{ "仅供参考，最终以范围为准。" if lang=="zh" else "Estimate for reference only. Final quote depends on scope." }}
+      </div>
     </div>
 
-    <!-- AI Smart RFQ widget -->
-    <div class="wx-card">
-        <div class="wx-card-header">
-            <i class="fa-solid fa-wand-magic-sparkles text-warning"></i>
-            <span>
-                {% if lang == 'zh' %}AI 智能 RFQ 生成{% else %}AI Smart RFQ (Demo){% endif %}
-            </span>
-        </div>
-        <div class="p-3">
-            {% include "_smart_rfq_widget.html" %}
-        </div>
-    </div>
+    <script>
+      (function(){
+        function parsePrice(s){
+          if(!s) return 0;
+          var n = String(s).replace(/,/g,'').replace(/[^\d.]/g,'');
+          return parseFloat(n || '0');
+        }
+        function recalc(){
+          var sel = document.getElementById('calcPackage');
+          if(!sel) return;
+          var baseStr = sel.options[sel.selectedIndex]?.dataset?.price || sel.options[sel.selectedIndex]?.textContent || '';
+          var base = parsePrice(baseStr);
+          var addons = 0;
+          document.querySelectorAll('#calculator [data-fee]').forEach(function(el){
+            if(el.checked) addons += parseFloat(el.dataset.fee || '0');
+          });
+          var tier = 0;
+        var tierEl = document.querySelector('input[name="language_tier"]:checked');
+        if(tierEl){ tier = parsePrice(tierEl.getAttribute('data-add')); }
+        var total = base + addons + tier;
+          var out = document.getElementById('calcTotal');
+          if(out){ out.textContent = '¥' + total.toLocaleString('en-US'); }
+        }
+        document.addEventListener('change', function(e){
+          if(e.target && (e.target.id === 'calcPackage' || e.target.matches('#calculator [data-fee]') || e.target.matches('input[name="language_tier"]'))){ recalc(); }
+        });
+        document.addEventListener('DOMContentLoaded', recalc);
+      })();
+    </script>
+  </section>
 
-    <!-- Why independent site -->
-    <div class="wx-card p-3">
-        <h6 class="fw-bold mb-3">
-            {% if lang == 'en' %}Why an independent site?{% else %}为什么选择独立站？{% endif %}
-        </h6>
-        <div class="d-flex gap-3 mb-3">
-            <i class="fa-solid fa-check-circle text-success mt-1"></i>
-            <p class="small text-muted mb-0">
-                {% if lang == 'en' %}No platform price war, talk directly to clients.{% else %}摆脱平台内卷，不再只比价格。{% endif %}
-            </p>
-        </div>
-        <div class="d-flex gap-3 mb-3">
-            <i class="fa-solid fa-check-circle text-success mt-1"></i>
-            <p class="small text-muted mb-0">
-                {% if lang == 'en' %}Build a real brand image.{% else %}树立企业品牌形象。{% endif %}
-            </p>
-        </div>
-        <div class="d-flex gap-3">
-            <i class="fa-solid fa-check-circle text-success mt-1"></i>
-            <p class="small text-muted mb-0">
-                {% if lang == 'en' %}Own your traffic and customer list.{% else %}直接沉淀私域客户资源。{% endif %}
-            </p>
-        </div>
-    </div>
-
-    <!-- WeChat contact -->
-    <div class="wx-card p-4 text-center" id="contact-area">
-        <h6 class="fw-bold mb-3">
-            {% if lang == 'en' %}Contact & WeChat{% else %}联系咨询{% endif %}
-        </h6>
-        <div class="bg-light p-2 rounded-3 d-inline-block mb-2">
-            <img src="{{ url_for('static', filename='img/agency_wechat_qr.png') }}"
-                 onerror="this.src='https://placehold.co/150x150?text=WeChat+QR'"
-                 class="img-fluid" style="width: 140px; height: 140px;">
-        </div>
-        <p class="small text-muted mb-1">
-            {% if lang == 'en' %}
-                Long-press the QR code to add on WeChat and get a quote.
-            {% else %}
-                长按识别二维码，获取报价方案。
-            {% endif %}
-        </p>
-        <p class="small text-muted mb-0">
-            {% if lang == 'en' %}
-                You can also try the AI chat bubble in the corner for quick questions (demo).
-            {% else %}
-                页面右下角的 AI 聊天气泡可用于快速问答（演示功能）。
-            {% endif %}
-        </p>
-    </div>
 </div>
-
-<div class="wx-bottom-bar">
-    <a href="#contact-area" class="btn btn-light flex-fill text-dark fw-bold border">
-        <i class="fa-regular fa-comments me-1"></i>
-        {% if lang == 'en' %}Chat{% else %}咨询{% endif %}
-    </a>
-    <a href="#contact-area" class="btn btn-wx-action flex-fill">
-        {% if lang == 'en' %}Add WeChat{% else %}添加微信{% endif %}
-    </a>
-</div>
-
-<script>
-    function calcWxPrice() {
-        const USD_CNY = 7.2;                   // Estimate
-        const domainUsdPerYear = 12.0;         // Typical .com renewal estimate
-        const hostingUsdPerMonth = {
-            4800: 7,
-            9800: 7,
-            19800: 25
-        };
-
-        let base = parseInt(document.getElementById('wxSiteType').value);
-        let total = base;
-
-        if (document.getElementById('wxOptSEO').checked) total += parseInt(document.getElementById('wxOptSEO').value);
-        if (document.getElementById('wxOptCopy').checked) total += parseInt(document.getElementById('wxOptCopy').value);
-        if (document.getElementById('wxOptChat') && document.getElementById('wxOptChat').checked) total += parseInt(document.getElementById('wxOptChat').value);
-
-        const hostUsd = hostingUsdPerMonth[base] || 10;
-        const infraCnyYear = Math.round((hostUsd * 12 + domainUsdPerYear) * USD_CNY);
-
-        document.getElementById('wxTotalPrice').innerText = total.toLocaleString();
-        const infraEl = document.getElementById('wxInfraPrice');
-        if (infraEl) infraEl.innerText = infraCnyYear.toLocaleString();
-    }
-</script>
 {% endblock %}

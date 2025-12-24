@@ -1,0 +1,27 @@
+{# Floating theme switcher: cosmetic only (no backend changes) #}
+<div class="theme-switcher" id="themeSwitcher" aria-label="{{ '风格切换' if lang=='zh' else 'Theme switcher' }}">
+  <button class="theme-switcher__toggle" type="button" id="themeToggle" aria-expanded="false">
+    <i class="fa-solid fa-palette"></i>
+    <span class="theme-switcher__label d-none d-sm-inline">{{ '风格' if lang=='zh' else 'Style' }}</span>
+  </button>
+
+  <div class="theme-switcher__panel" id="themePanel" role="menu" aria-hidden="true">
+    <div class="theme-switcher__title">{{ '选择风格' if lang=='zh' else 'Choose a style' }}</div>
+    <button class="theme-switcher__item" type="button" data-theme="classic" role="menuitem">
+      <span class="dot dot--classic"></span>
+      {{ '经典（默认）' if lang=='zh' else 'Classic (default)' }}
+    </button>
+    <button class="theme-switcher__item" type="button" data-theme="warm" role="menuitem">
+      <span class="dot dot--warm"></span>
+      {{ '暖色（更有温度）' if lang=='zh' else 'Warm (friendly)' }}
+    </button>
+    <button class="theme-switcher__item" type="button" data-theme="midnight" role="menuitem">
+      <span class="dot dot--midnight"></span>
+      {{ '夜色（高对比）' if lang=='zh' else 'Midnight (high contrast)' }}
+    </button>
+
+    <div class="theme-switcher__hint">
+      {{ '仅影响视觉，不改变功能。' if lang=='zh' else 'Visual only. No functionality changes.' }}
+    </div>
+  </div>
+</div>

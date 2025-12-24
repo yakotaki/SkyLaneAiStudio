@@ -50,8 +50,6 @@ def inject_lang_helpers():
         "lang": _lang,
         "support_policy": get_support_policy(_lang),
         "addons": localize_addons(_lang),
-        "language_tiers": localize_language_tiers(_lang),
-        "banking_service_note": BANKING_SERVICE_NOTE.get(_lang, BANKING_SERVICE_NOTE["en"]),
     }
 # === OpenAI client ===
 client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
@@ -107,22 +105,6 @@ PROJECTS = [
         "icon": "fa-cart-shopping"
     }
 ]
-
-
-# -------------------------
-# Cost Estimator: Language tiers (applies to all base website packages)
-# Base package prices include CN + EN. Tier modifiers apply when more languages are required.
-# -------------------------
-LANGUAGE_TIERS = [
-    {"id": "starter", "name": {"en": "Starter", "zh": "Starter"}, "max_lang": 3, "add_price": 0},
-    {"id": "business", "name": {"en": "Business", "zh": "Business"}, "max_lang": 5, "add_price": 1500},
-    {"id": "pro", "name": {"en": "Pro", "zh": "Pro"}, "max_lang": 10, "add_price": 3000},
-]
-
-BANKING_SERVICE_NOTE = {
-    "en": "Banking / payment-related services are handled individually and quoted separately.",
-    "zh": "银行/收款相关服务为单独评估与单独报价。"
-}
 
 # -------------------------
 # Packages (realistic pricing)
@@ -358,18 +340,6 @@ DASHBOARD_SITES = [
     },
 ]
 
-LANGUAGE_TIERS = [
-    {"id": "starter", "name": {"en": "Starter", "zh": "Starter"}, "max_lang": 3, "add_price": 0},
-    {"id": "business", "name": {"en": "Business", "zh": "Business"}, "max_lang": 5, "add_price": 1500},
-    {"id": "pro", "name": {"en": "Pro", "zh": "Pro"}, "max_lang": 10, "add_price": 3000},
-]
-
-BANKING_SERVICE_NOTE = {
-    "en": "Banking / payment-related services are handled individually and quoted separately.",
-    "zh": "银行/收款相关服务为单独评估与单独报价。"
-}
-
-
 DASHBOARD_RECENT_LEADS = [
     {
         "site_id": "factory",
@@ -485,30 +455,6 @@ def localize_addons(lang: str):
             }
         )
     return items
-
-
-
-
-def localize_language_tiers(lang: str):
-    lang = "zh" if (lang or "").lower().startswith("zh") else "en"
-    items = []
-    for t in LANGUAGE_TIERS:
-        items.append({
-            "id": t["id"],
-            "display_name": t["name"][lang],
-            "max_lang": t["max_lang"],
-            "add_price": t["add_price"],
-        })
-    return items
-
-def localize_language_tiers(lang: str):
-    lang = "zh" if (lang or "").lower().startswith("zh") else "en"
-    return [{
-        "id": t["id"],
-        "display_name": t["name"][lang],
-        "max_lang": t["max_lang"],
-        "add_price": t["add_price"],
-    } for t in LANGUAGE_TIERS]
 
 
 def get_support_policy(lang: str):
