@@ -132,7 +132,7 @@ PACKAGES = [
         "id": "pkg_factory",
         "project_id": "factory",
         "name": {"en": "Factory Export Starter Site", "zh": "工厂出口官网 · 标准版"},
-        "price": {"en": "¥8,800", "zh": "¥8,800"},
+        "price": {"en": "¥880", "zh": "880元"},
         "delivery": {"en": "7–10 business days", "zh": "7–10 个工作日"},
         "recommended": False,
         "bullets": {
@@ -176,7 +176,7 @@ PACKAGES = [
         "id": "pkg_sourcing",
         "project_id": "sourcing",
         "name": {"en": "Sourcing & Service Website", "zh": "一站式采购服务官网"},
-        "price": {"en": "¥12,800", "zh": "¥12,800"},
+        "price": {"en": "¥1280", "zh": "1280元"},
         "delivery": {"en": "10–14 business days", "zh": "10–14 个工作日"},
         "recommended": True,
         "bullets": {
@@ -222,12 +222,12 @@ PACKAGES = [
         "id": "pkg_tea",
         "project_id": "tea",
         "name": {"en": "Brand Storytelling Site (Tea)", "zh": "品牌故事官网（以茶叶为例）"},
-        "price": {"en": "¥9,800", "zh": "¥9,800"},
+        "price": {"en": "¥980", "zh": "980元"},
         "delivery": {"en": "7–10 business days", "zh": "7–10 个工作日"},
         "recommended": False,
         "bullets": {
             "en": [
-                "Based on: Premium Tea Brand demo",
+                "Based on: Premium Tea Brand",
                 "Story-driven layout with photos and short videos",
                 "Origin story, process, packaging and gallery sections",
                 "Lead capture form for distributors and importers"
@@ -266,12 +266,12 @@ PACKAGES = [
         "id": "pkg_shop",
         "project_id": "shop",
         "name": {"en": "Export E-Commerce Shop", "zh": "出口型独立商城"},
-        "price": {"en": "¥19,800+", "zh": "¥19,800+"},
+        "price": {"en": "¥1980", "zh": "1980元"},
         "delivery": {"en": "3–5 weeks (depends on catalog size)", "zh": "3–5 周（取决于产品数量）"},
         "recommended": False,
         "bullets": {
             "en": [
-                "Based on: SkyLane Shop demo (basket + login + checkout)",
+                "Based on: SkyLane Shop (basket + login + checkout)",
                 "Product catalog, shopping cart and demo checkout flow",
                 "User account area with sample orders",
                 "Ready for payment integration (Stripe/PayPal/bank transfer)"
@@ -443,30 +443,39 @@ def build_dashboard_summary(lang: str) -> dict:
 # -------------------------
 ADDONS = [
     {
+        "id": "addon_domain",
+        "name": {"en": "Website address", "zh": "网站地址"},
+        "price": "150元 / year",
+        "desc": {
+            "en": "The price is not guaranteed and depends on the domain.",
+            "zh": "价格不保证，取决于域名。",
+        },
+    },
+    {
         "id": "addon_seo",
         "name": {"en": "Search Engine SEO Setup", "zh": "搜索引擎 SEO 基础设置"},
-        "price": "¥1,500",
+        "price": "250元",
         "desc": {
-            "en": "On-page SEO essentials: titles/meta, site structure, sitemap, and indexing guidance (no ranking guarantee).",
-            "zh": "站内 SEO 基础设置：标题/描述、站点结构、站点地图与收录指引（不承诺排名）。",
+            "en": "On-page SEO essentials: titles/meta, site structure, sitemap, and indexing guidance (no ranking guarantee). Also covers basic performance and crawlability checks (canonical/robots) to reduce indexing issues.",
+            "zh": "站内 SEO 基础设置：标题/描述、站点结构、站点地图与收录指引（不承诺排名）。同时包含基础性能与可抓取性检查（canonical/robots），以减少收录与索引问题。",
         },
     },
     {
         "id": "addon_copywriting",
         "name": {"en": "Professional Language Copywriting", "zh": "专业语言文案撰写"},
-        "price": "¥2,000",
+        "price": "200元",
         "desc": {
-            "en": "Conversion-focused, polished copy for key pages (based on your materials).",
-            "zh": "为关键页面提供更地道、更具转化力的专业文案（基于你提供的资料）。",
+            "en": "Conversion-focused, polished copy for key pages (based on your materials). Includes tone and terminology alignment plus one revision round to match your brand voice.",
+            "zh": "为关键页面提供更地道、更具转化力的专业文案（基于你提供的资料）。包含语气与行业用语统一，并提供 1 轮修改以贴合您的品牌风格。",
         },
     },
     {
-        "id": "addon_chat_whatsapp",
-        "name": {"en": "Online Chat / WhatsApp Integration", "zh": "在线聊天 / WhatsApp 接入"},
-        "price": "¥1,000",
+        "id": "addon_messaging",
+        "name": {"en": "Website Messaging + Seller Inbox Dashboard", "zh": "网站站内消息 + 商家后台收件箱"},
+        "price": "¥200元",
         "desc": {
-            "en": "Technical integration only. Sellers reply to customers. Supports a web inbox; for real WhatsApp, connect WhatsApp Business Platform (Cloud API) via webhook + storage + API replies.",
-            "zh": "仅提供技术对接，消息由卖家自行回复。支持网页收件箱；如需“真实 WhatsApp”，可对接 WhatsApp Business Platform（Cloud API），通过 Webhook + 存储 + API 回复实现。",
+            "en": "Visitor can send a message from the website (name + email + message). Seller can view messages and reply in a dashboard (inbox + conversation thread).",
+            "zh": "访客可在网站发送消息（姓名/邮箱/内容）。商家可在后台仪表盘查看与回复（收件箱 + 对话线程）。",
         },
     },
 ]

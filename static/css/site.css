@@ -162,6 +162,37 @@ body > * { position: relative; z-index: 1; }
   background: rgba(245,158,11,0.12);
   color: var(--primary);
 }
+.hero-title .hero-word{
+  display: inline-block;
+  letter-spacing: -0.4px;
+}
+
+.hero-title .hero-dot{
+  display: inline-block;
+  margin: 0 10px;
+  opacity: 0.5;
+  transform: translateY(-1px);
+}
+
+.hero-subtitle{
+  max-width: 52ch;
+  line-height: 1.55;
+}
+
+.hero-highlight{
+  font-weight: 800;
+  padding: 0 6px;
+  border-radius: 8px;
+  background: rgba(0,0,0,0.06);
+}
+
+html[data-theme="midnight"] .hero-highlight{
+  background: rgba(255,255,255,0.10);
+}
+
+.hero-meta{
+  letter-spacing: 0.1px;
+}
 
 /* Footer: nicer separation */
 footer{ border-top: 1px solid rgba(148,163,184,0.18); }

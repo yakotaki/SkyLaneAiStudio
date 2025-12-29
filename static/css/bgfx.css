@@ -1,0 +1,66 @@
+/* bgfx.css
+   Lightweight animated background canvas.
+
+   - Canvas is fixed and fills the viewport.
+   - All page content sits in #site-layer above it.
+   - JS renders subtle particles/lines using theme CSS variables.
+*/
+
+:root{
+  --bgfx-opacity:    0.78;
+  --bgfx-dot-alpha:  0.34;
+  --bgfx-line-alpha: 0.18;
+  --bgfx-maxdist:    150;
+}
+
+html[data-theme="midnight"]{
+  --bgfx-opacity:    0.45;  /* reduce visibility on dark */
+  --bgfx-dot-alpha:  0.20;
+  --bgfx-line-alpha: 0.09;
+  --bgfx-maxdist:    115;   /* fewer lines */
+}
+
+html[data-theme="classic"]{
+  --bgfx-opacity:    0.82;  /* boost visibility on light */
+  --bgfx-dot-alpha:  0.36;
+  --bgfx-line-alpha: 0.20;
+  --bgfx-maxdist:    155;
+}
+
+html[data-theme="warm"]{
+  --bgfx-opacity:    0.80;
+  --bgfx-dot-alpha:  0.35;
+  --bgfx-line-alpha: 0.19;
+  --bgfx-maxdist:    155;
+}
+
+.bgfx-canvas{ opacity: var(--bgfx-opacity); }
+
+
+.bgfx-canvas{
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 0;
+  transform: translateZ(0);
+  opacity: 0.65;
+}
+
+#site-layer{
+  position: relative;
+  z-index: 1;
+}
+
+html[data-theme="midnight"] .bgfx-canvas{
+  opacity: 0.85;
+}
+
+@media (prefers-reduced-motion: reduce){
+  .bgfx-canvas{ opacity: 0.45; }
+}
+
+@media print{
+  .bgfx-canvas{ display: none !important; }
+}

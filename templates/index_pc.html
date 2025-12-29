@@ -4,13 +4,40 @@
 {% block content %}
 <div class="container py-4">
 
-  <!-- Hero -->
-  <div class="p-4 p-md-5 rounded-4 border bg-body-tertiary">
-    <h1 class="display-6 fw-bold mb-2">{{ "销售 · 管理 · 增长" if lang=="zh" else "Sell. Manage. Grow." }}</h1>
-    <p class="lead mb-3">
-      {{ "面向出口与增长型企业的网站解决方案。" if lang=="zh" else "Websites built for exporters and growth-focused businesses." }}
-      {{ support_policy.browsing }}
-    </p>
+    <!-- Hero -->
+    <div class="p-4 p-md-5 rounded-4 border bg-body-tertiary">
+  <h1 class="display-6 fw-bold mb-2 hero-title">
+    {% if lang == "zh" %}
+      <span class="hero-word">销售</span>
+      <span class="hero-dot">·</span>
+      <span class="hero-word">管理</span>
+      <span class="hero-dot">·</span>
+      <span class="hero-word">增长</span>
+    {% else %}
+      <span class="hero-word">Sell</span>
+      <span class="hero-dot">·</span>
+      <span class="hero-word">Manage</span>
+      <span class="hero-dot">·</span>
+      <span class="hero-word">Grow</span>
+    {% endif %}
+  </h1>
+
+  <p class="lead mb-2 hero-subtitle">
+    {% if lang == "zh" %}
+      为外贸出口与增长型企业打造的<span class="hero-highlight">双语高转化网站</span>。
+    {% else %}
+      Websites for exporters and growth-focused businesses—<span class="hero-highlight">fast, bilingual, conversion-first</span>.
+    {% endif %}
+  </p>
+
+  <p class="small text-muted mb-3 hero-meta">
+    {% if lang == "zh" %}
+      支持手机与电脑浏览{% if support_policy and support_policy.browsing %} · {{ support_policy.browsing }}{% endif %}
+    {% else %}
+      Mobile + desktop supported{% if support_policy and support_policy.browsing %} · {{ support_policy.browsing }}{% endif %}
+    {% endif %}
+  </p>
+
 
     <div class="row g-3">
       <div class="col-lg-7">
@@ -192,21 +219,20 @@
 
           <div class="fw-semibold mb-2">{{ "增值选项" if lang=="zh" else "Add-ons" }}</div>
           <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="addonSeo" data-fee="1500">
-            <label class="form-check-label" for="addonSeo">{{ "搜索引擎 SEO 基础设置 (+¥1,500)" if lang=="zh" else "Search Engine SEO Setup (+¥1,500)" }}</label>
+            <input class="form-check-input" type="checkbox" id="addonDomain" data-fee="150">
+            <label class="form-check-label" for="addonDomain">{{ "网站地址 (+150元 / year)" if lang=="zh" else "Website address (+¥150 / year)" }}</label>
           </div>
           <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="addonCopy" data-fee="2000">
-            <label class="form-check-label" for="addonCopy">{{ "专业语言文案撰写 (+¥2,000)" if lang=="zh" else "Professional Language Copywriting (+¥2,000)" }}</label>
+            <input class="form-check-input" type="checkbox" id="addonSeo" data-fee="250">
+            <label class="form-check-label" for="addonSeo">{{ "搜索引擎 SEO 基础设置 (+250元)" if lang=="zh" else "Search Engine SEO Setup (+¥250)" }}</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="addonCopy" data-fee="200">
+            <label class="form-check-label" for="addonCopy">{{ "专业语言文案撰写 (+200元)" if lang=="zh" else "Professional Language Copywriting (+200元)" }}</label>
           </div>
           <div class="form-check mb-3">
-            <input class="form-check-input" type="checkbox" id="addonChat" data-fee="1000">
-            <label class="form-check-label" for="addonChat">{{ "在线聊天 / WhatsApp 接入 (+¥1,000)" if lang=="zh" else "Online Chat / WhatsApp Integration (+¥1,000)" }}</label>
-          </div>
-
-          <div class="small text-secondary">
-            {{ "提示：WhatsApp 接入可提供“网页收件箱面板”，卖家可在浏览器中查看与回复消息（无需直接打开 WhatsApp）。" if lang=="zh"
-               else "Note: WhatsApp integration can include a web inbox dashboard so sellers can view/reply in a browser (no direct WhatsApp app required)." }}
+            <input class="form-check-input" type="checkbox" id="addonChat" data-fee="200">
+            <label class="form-check-label" for="addonChat">{{ "在线聊天 / WhatsApp 接入 (+200元)" if lang=="zh" else "Online Chat / WhatsApp Integration (+200元)" }}</label>
           </div>
         </div>
       </div>
@@ -328,4 +354,5 @@
   </section>
 
 </div>
+
 {% endblock %}
