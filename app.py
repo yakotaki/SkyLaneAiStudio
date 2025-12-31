@@ -132,7 +132,7 @@ PACKAGES = [
         "id": "pkg_factory",
         "project_id": "factory",
         "name": {"en": "Factory Export Starter Site", "zh": "工厂出口官网 · 标准版"},
-        "price": {"en": "¥880", "zh": "880元"},
+        "price": {"en": "880元", "zh": "880元"},
         "delivery": {"en": "7–10 business days", "zh": "7–10 个工作日"},
         "recommended": False,
         "bullets": {
@@ -145,7 +145,7 @@ PACKAGES = [
             "zh": [
                 "基于：工厂 B2B 出口演示网站",
                 "最多 5 个页面（首页 / 公司介绍 / 产品列表 / 质量控制 / 联系我们）",
-                "中英双语结构",
+                "中英多语结构",
                 "在线询盘表单（自动发送到您的邮箱）"
             ]
         },
@@ -176,7 +176,7 @@ PACKAGES = [
         "id": "pkg_sourcing",
         "project_id": "sourcing",
         "name": {"en": "Sourcing & Service Website", "zh": "一站式采购服务官网"},
-        "price": {"en": "¥1280", "zh": "1280元"},
+        "price": {"en": "1280元", "zh": "1280元"},
         "delivery": {"en": "10–14 business days", "zh": "10–14 个工作日"},
         "recommended": True,
         "bullets": {
@@ -222,7 +222,7 @@ PACKAGES = [
         "id": "pkg_tea",
         "project_id": "tea",
         "name": {"en": "Brand Storytelling Site (Tea)", "zh": "品牌故事官网（以茶叶为例）"},
-        "price": {"en": "¥980", "zh": "980元"},
+        "price": {"en": "980元", "zh": "980元"},
         "delivery": {"en": "7–10 business days", "zh": "7–10 个工作日"},
         "recommended": False,
         "bullets": {
@@ -266,7 +266,7 @@ PACKAGES = [
         "id": "pkg_shop",
         "project_id": "shop",
         "name": {"en": "Export E-Commerce Shop", "zh": "出口型独立商城"},
-        "price": {"en": "¥1980", "zh": "1980元"},
+        "price": {"en": "1980元", "zh": "1980元"},
         "delivery": {"en": "3–5 weeks (depends on catalog size)", "zh": "3–5 周（取决于产品数量）"},
         "recommended": False,
         "bullets": {
@@ -439,7 +439,7 @@ def build_dashboard_summary(lang: str) -> dict:
 
 
 # -------------------------
-# Add-ons (bilingual) & Support Policy (for templates)
+# Add-ons (Multilingual) & Support Policy (for templates)
 # -------------------------
 ADDONS = [
     {
@@ -472,7 +472,7 @@ ADDONS = [
     {
         "id": "addon_messaging",
         "name": {"en": "Website Messaging + Seller Inbox Dashboard", "zh": "网站站内消息 + 商家后台收件箱"},
-        "price": "¥200元",
+        "price": "200元",
         "desc": {
             "en": "Visitor can send a message from the website (name + email + message). Seller can view messages and reply in a dashboard (inbox + conversation thread).",
             "zh": "访客可在网站发送消息（姓名/邮箱/内容）。商家可在后台仪表盘查看与回复（收件箱 + 对话线程）。",
@@ -660,21 +660,21 @@ Return the result as JSON with two string fields: rfq_en and rfq_zh.
 
 AI_KB = {
     "agency_en": """
-SkyLane AI Studio is a small web studio focused on bilingual export websites for Chinese factories and trading companies.
+SkyLane AI Studio is a small web studio focused on multilingual export websites for Chinese factories and trading companies.
 We build:
 - Factory profile sites (tools, hardware, manufacturing)
 - Service / sourcing agency sites
 - Simple e-commerce / B2C sites
-Strengths: English content writing, Chinese/English bilingual layouts, SEO-friendly structure, WeChat H5 friendly pages.
+Strengths: English content writing, Chinese/English multilingual layouts, SEO-friendly structure, WeChat H5 friendly pages.
 Typical questions: MOQ info, how many pages, pricing packages, what content is needed from the factory, how long to finish a site.
     """,
     "agency_zh": """
-SkyLane AI Studio（天航智网工作室）专注为中国工厂和外贸公司打造出口型双语网站。
+SkyLane AI Studio（天航智网工作室）专注为中国工厂和外贸公司打造出口型多语言网站。
 我们主要制作：
 - 工厂形象与产品网站（工具、五金、制造业等）
 - 采购 / 外贸服务型网站
 - 简单独立站类 B2C 网站
-特点：中英文双语结构、英文文案优化、初级 SEO 布局、支持微信 H5 访问。
+特点：多语言结构、英文文案优化、基础 SEO 布局、支持微信 H5 访问。
 常见问题：需要哪些资料？起步价和不同套餐？制作周期？网站能否展示证书、质检流程、出运信息等。
     """
 }

@@ -205,9 +205,10 @@
                 <div class="fw-semibold">{{ t.display_name }}</div>
                 <div class="small text-secondary">
                   {% if lang=="zh" %}
-                    最多 {{ t.max_lang }} 种语言 · +¥{{ t.add_price }}
+                    最多 {{ t.max_lang }} 种语言 · +{{ t.add_price }}元
+                    最多 {{ t.max_lang }} 种语言 · +{{ t.add_price }}元
                   {% else %}
-                    Up to {{ t.max_lang }} languages · +¥{{ t.add_price }}
+                    Up to {{ t.max_lang }} languages · +{{ t.add_price }}元
                   {% endif %}
                 </div>
               </div>
@@ -220,11 +221,11 @@
           <div class="fw-semibold mb-2">{{ "增值选项" if lang=="zh" else "Add-ons" }}</div>
           <div class="form-check">
             <input class="form-check-input" type="checkbox" id="addonDomain" data-fee="150">
-            <label class="form-check-label" for="addonDomain">{{ "网站地址 (+150元 / year)" if lang=="zh" else "Website address (+¥150 / year)" }}</label>
+            <label class="form-check-label" for="addonDomain">{{ "网站地址 (+150元 / year)" if lang=="zh" else "Website address (+150元 / year)" }}</label>
           </div>
           <div class="form-check">
             <input class="form-check-input" type="checkbox" id="addonSeo" data-fee="250">
-            <label class="form-check-label" for="addonSeo">{{ "搜索引擎 SEO 基础设置 (+250元)" if lang=="zh" else "Search Engine SEO Setup (+¥250)" }}</label>
+            <label class="form-check-label" for="addonSeo">{{ "搜索引擎 SEO 基础设置 (+250元)" if lang=="zh" else "Search Engine SEO Setup (+250元)" }}</label>
           </div>
           <div class="form-check">
             <input class="form-check-input" type="checkbox" id="addonCopy" data-fee="200">
@@ -272,7 +273,7 @@
         var total = base + addons + tier;
         var out = document.getElementById('calcTotal');
         if(out){
-          out.textContent = '¥' + total.toLocaleString('en-US');
+          out.textContent =  total.toLocaleString('en-US') + '元';
         }
       }
       document.addEventListener('change', function(e){
