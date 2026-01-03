@@ -194,5 +194,12 @@ html[data-theme="midnight"] .hero-highlight{
   letter-spacing: 0.1px;
 }
 
+.qr-thumb{
+  width: 110px;      /* adjust: 90–140px */
+  height: auto;
+  max-width: 100%;
+  display: block;
+}
+
 /* Footer: nicer separation */
 footer{ border-top: 1px solid rgba(148,163,184,0.18); }

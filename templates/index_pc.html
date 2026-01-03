@@ -297,10 +297,28 @@
         <div class="p-4 rounded-4 border bg-white h-100">
           <div class="fw-semibold mb-2">{{ "联系渠道" if lang=="zh" else "Contact channels" }}</div>
           <ul class="mb-0">
-            <li>{{ "微信：添加/扫码（请在此放二维码）" if lang=="zh" else "WeChat: add/scan (place QR here)" }}</li>
-            <li>{{ "电话：你的业务电话（可选）" if lang=="zh" else "Phone: your business number (optional)" }}</li>
+            <li>
+              {{ "微信：添加/扫码" if lang=="zh" else "WeChat: add/scan" }}
+            </li>
+
+            <!-- QR block (kept separate so it cannot break list layout) -->
+            <li class="list-unstyled mt-2">
+              <a href="{{ url_for('static', filename='img/wechat_qr.png') }}" target="_blank" class="text-decoration-none">
+                <img
+                  src="{{ url_for('static', filename='img/wechat_qr.png') }}"
+                  alt="{{ '微信二维码' if lang=='zh' else 'WeChat QR code' }}"
+                  style="width: 140px; max-width: 100%; height: auto; display: block;"
+                >
+                <div class="text-secondary small mt-1">
+                  {{ "点击二维码可放大" if lang=="zh" else "Click to enlarge" }}
+                </div>
+              </a>
+            </li>
+
+            <li>{{ "电话： 157-0165-9802" if lang=="zh" else "Phone: 157-0165-9802" }}</li>
             <li>{{ "邮箱：support@skylaneai.com（请替换为真实邮箱）" if lang=="zh" else "Email: support@skylaneai.com (replace with your real email)" }}</li>
           </ul>
+
 
           <hr class="my-3">
           <div class="fw-semibold mb-2">{{ "服务时间" if lang=="zh" else "Working hours" }}</div>
