@@ -32,6 +32,7 @@
 
   <p class="small text-muted mb-3 hero-meta">
     {% if lang == "zh" %}
+
       支持手机与电脑浏览{% if support_policy and support_policy.browsing %} · {{ support_policy.browsing }}{% endif %}
     {% else %}
       Mobile + desktop supported{% if support_policy and support_policy.browsing %} · {{ support_policy.browsing }}{% endif %}
@@ -43,14 +44,15 @@
       <div class="col-lg-7">
         <div class="p-3 rounded-3 border bg-white h-100">
           <div class="fw-semibold mb-2">{{ "多语言支持" if lang=="zh" else "Multi-language support" }}</div>
-          <div class="text-secondary">{{ support_policy.multi_lang }}</div>
+          <!-- <div class="text-secondary">{{ support_policy.multi_lang }}</div> -->
+          <p class="mb-0">{{ support_policy.multi_lang | safe }}</p>
           <div class="text-secondary mt-2">{{ support_policy.contact_email }}</div>
         </div>
       </div>
       <div class="col-lg-5">
         <div class="p-3 rounded-3 border bg-white h-100">
           <div class="fw-semibold mb-2">{{ "服务时间" if lang=="zh" else "Working hours" }}</div>
-          <div>{{ support_policy.hours }}</div>
+          <p class="mb-0">{{ support_policy.hours | safe }}</p>
           <div class="text-secondary mt-2">{{ support_policy.missed_calls }}</div>
         </div>
       </div>
@@ -322,7 +324,7 @@
 
           <hr class="my-3">
           <div class="fw-semibold mb-2">{{ "服务时间" if lang=="zh" else "Working hours" }}</div>
-          <div>{{ support_policy.hours }}</div>
+          <p class="mb-0">{{ support_policy.hours | safe }}</p>
           <div class="text-secondary mt-2">{{ support_policy.missed_calls }}</div>
         </div>
       </div>

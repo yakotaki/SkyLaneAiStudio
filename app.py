@@ -495,9 +495,6 @@ def localize_addons(lang: str):
         )
     return items
 
-
-
-
 def localize_language_tiers(lang: str):
     lang = "zh" if (lang or "").lower().startswith("zh") else "en"
     items = []
@@ -524,17 +521,17 @@ def get_support_policy(lang: str):
     lang = "zh" if (lang or "").lower().startswith("zh") else "en"
     if lang == "zh":
         return {
-            "hours": "工作时间：周一-周三 09:00-12:00；周四-周五 09:00-18:00（北京时间）",
+            "hours": "工作时间：<br>周一-周三 09:00-12:00<br>周四-周五 09:00-18:00",
             "missed_calls": "未接来电：1 个工作日内回拨",
             "browsing": "支持手机端与电脑端访问",
-            "multi_lang": "多语言支持：Starter 3 种语言；Business 5 种语言；Pro 不限",
+            "multi_lang": "多语言支持：<br>Starter 3 种语言<br>Business 5 种语言<br>Pro 10 种语言",
             "contact_email": "可选：展示公司邮箱（如 info@skylaneia.com）",
         }
     return {
-        "hours": "Working hours: Mon–Wed 09:00–12:00; Thu–Fri 09:00–18:00 (China time)",
+        "hours": "Working hours: <br>Mon–Wed 09:00–12:00; <br>Thu–Fri 09:00–18:00",
         "missed_calls": "Missed calls: call back within 1 business day",
         "browsing": "Mobile and PC browsing supported",
-        "multi_lang": "Multi-language: Starter 3; Business 5; Pro unlimited",
+        "multi_lang": "Multi-language: \nStarter 3; \nBusiness 5; \nPro 10 languages",
         "contact_email": "Optional: display your company email (e.g., info@skylaneia.com)",
     }
 
