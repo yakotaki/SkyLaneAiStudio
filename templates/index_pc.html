@@ -32,7 +32,6 @@
 
   <p class="small text-muted mb-3 hero-meta">
     {% if lang == "zh" %}
-
       支持手机与电脑浏览{% if support_policy and support_policy.browsing %} · {{ support_policy.browsing }}{% endif %}
     {% else %}
       Mobile + desktop supported{% if support_policy and support_policy.browsing %} · {{ support_policy.browsing }}{% endif %}
@@ -44,7 +43,6 @@
       <div class="col-lg-7">
         <div class="p-3 rounded-3 border bg-white h-100">
           <div class="fw-semibold mb-2">{{ "多语言支持" if lang=="zh" else "Multi-language support" }}</div>
-          <!-- <div class="text-secondary">{{ support_policy.multi_lang }}</div> -->
           <p class="mb-0">{{ support_policy.multi_lang | safe }}</p>
           <div class="text-secondary mt-2">{{ support_policy.contact_email }}</div>
         </div>
@@ -147,6 +145,12 @@
       </div>
       {% endfor %}
     </div>
+
+  <div class="text-secondary small mt-3">
+    {{ "说明：CRM*=客户关系管理（管理客户/线索/跟进）。RFQ**=询价/报价请求（客户提交需求获取报价）。ERP***=企业资源计划（统一管理库存/订单/财务/运营）。" if lang=="zh"
+      else "Note: CRM* = Customer Relationship Management (manage leads/customers/follow-ups). RFQ** = Request for Quotation (submit requirements to receive a quote). ERP*** = Enterprise Resource Planning (manage inventory/orders/finance/operations)." }}
+  </div>
+
   </section>
 
   <!-- Add-ons -->
@@ -170,10 +174,7 @@
       {% endfor %}
     </div>
 
-    <div class="text-secondary small mt-3">
-      {{ "说明：在线聊天/WhatsApp 接入为“技术接入与测试”。如需我们代运营客服（由我们工作人员回复与筛选线索），可另行按月报价。" if lang=="zh"
-         else "Note: Online Chat/WhatsApp integration covers technical integration and testing. Managed chat support (our staff replying and qualifying leads) can be quoted as a monthly service." }}
-    </div>
+
   </section>
 
   
@@ -233,9 +234,13 @@
             <input class="form-check-input" type="checkbox" id="addonCopy" data-fee="200">
             <label class="form-check-label" for="addonCopy">{{ "专业语言文案撰写 (+200元)" if lang=="zh" else "Professional Language Copywriting (+200元)" }}</label>
           </div>
-          <div class="form-check mb-3">
+          <div class="form-check">
             <input class="form-check-input" type="checkbox" id="addonChat" data-fee="200">
-            <label class="form-check-label" for="addonChat">{{ "在线聊天 / WhatsApp 接入 (+200元)" if lang=="zh" else "Online Chat / WhatsApp Integration (+200元)" }}</label>
+            <label class="form-check-label" for="addonChat">{{ "在线聊天" if lang=="zh" else "Online Chat Integration (+200元)" }}</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="addonProductMgr" data-fee="450">
+            <label class="form-check-label" for="addonProductMgr">{{ "商品管理后台 (+450元)" if lang=="zh" else "Product Manager Dashboard (+450元)" }}</label>
           </div>
         </div>
       </div>

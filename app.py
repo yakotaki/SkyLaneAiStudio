@@ -64,7 +64,7 @@ ENABLE_SMART_RFQ = True
 PROJECTS = [
     {
         "id": "factory",
-        "title": "Factory B2B Export",
+        "title": "工厂B2B出口 - Factory B2B Export ",
         "category": "Manufacturing",
         "desc": {
             "en": "Heavy machinery and tools export site. Focus on technical specs, certifications, and factory tour video.",
@@ -75,7 +75,7 @@ PROJECTS = [
     },
     {
         "id": "tea",
-        "title": "Premium Tea Brand",
+        "title": "高端茶叶品牌 - Premium Tea Brand",
         "category": "Consumer Goods",
         "desc": {
             "en": "Luxury storytelling site for a Hangzhou tea farm. Includes origin stories and premium packaging showcase.",
@@ -86,7 +86,7 @@ PROJECTS = [
     },
     {
         "id": "sourcing",
-        "title": "Horizon Sourcing",
+        "title": "地平线采购 - Horizon Sourcing",
         "category": "Service Agency",
         "desc": {
             "en": "Futuristic sourcing control center for importers: live-like process visuals, QC timelines, and logistics tracking screens.",
@@ -97,7 +97,7 @@ PROJECTS = [
     },
     {
         "id": "shop",
-        "title": "SkyLane Shop",
+        "title": "商店 - SkyLane Shop",
         "category": "E-Commerce",
         "desc": {
             "en": "Full B2C experience with shopping basket, user accounts, and checkout forms.",
@@ -152,22 +152,22 @@ PACKAGES = [
         "excluded": {
             "en": [
                 "Domain/hosting fees (billed by providers)",
-                "Paid plugins/tools (CRM, paid chat tools, etc.)",
+                "Paid plugins/tools (CRM*, paid chat tools, etc.)",
                 "Large-scale product data entry (can be quoted separately)"
             ],
             "zh": [
                 "域名/主机费用（由供应商收取）",
-                "第三方付费工具（CRM、付费客服等）",
+                "第三方付费工具（CRM*、付费客服等）",
                 "大批量产品录入（可单独报价）"
             ]
         },
         "ai_options": {
             "en": [
-                "Optional: AI Smart RFQ – expand buyer notes into a full RFQ",
+                "Optional: AI Smart RFQ** – expand buyer notes into a full RFQ**",
                 "Optional: AI Export Assistant chat widget"
             ],
             "zh": [
-                "可选：AI 智能 RFQ – 把买家备注扩展为完整询盘",
+                "可选：AI 智能 RFQ** – 把买家备注扩展为完整询盘",
                 "可选：AI 出口助手聊天窗口"
             ]
         }
@@ -184,7 +184,7 @@ PACKAGES = [
                 "Based on: Horizon Sourcing demo",
                 "Service pages: sourcing, QC, logistics and workflow",
                 "Case studies / project timeline sections",
-                "Multi-step RFQ form for better lead quality"
+                "Multi-step RFQ** form for better lead quality"
             ],
             "zh": [
                 "基于：Horizon Sourcing 演示站",
@@ -196,23 +196,23 @@ PACKAGES = [
         "excluded": {
             "en": [
                 "Domain/hosting fees (billed by providers)",
-                "Paid analytics/CRM subscriptions",
-                "Custom ERP integrations (quoted separately)"
+                "Paid analytics/CRM* subscriptions",
+                "Custom ERP*** integrations (quoted separately)"
             ],
             "zh": [
                 "域名/主机费用（由供应商收取）",
-                "付费统计/CRM订阅",
-                "定制 ERP/系统对接（需单独报价）"
+                "付费统计/CRM*订阅",
+                "定制 ERP***/系统对接（需单独报价）"
             ]
         },
         "ai_options": {
             "en": [
-                "Optional: AI Smart RFQ for complex projects",
+                "Optional: AI Smart RFQ** for complex projects",
                 "Optional: AI Export Assistant for 24/7 pre-sales questions",
                 "Optional: AI Market Navigator (basic market suggestions)"
             ],
             "zh": [
-                "可选：AI 智能 RFQ（适合复杂项目）",
+                "可选：AI 智能 RFQ**（适合复杂项目）",
                 "可选：AI 出口助手（7x24 小时预售问答）",
                 "可选：AI 市场导航（基础市场建议）"
             ]
@@ -287,12 +287,12 @@ PACKAGES = [
             "en": [
                 "Payment provider fees and business verification",
                 "Complex shipping/tax automation (quoted separately)",
-                "Large-scale product import/ERP sync (quoted separately)"
+                "Large-scale product import/ERP*** sync (quoted separately)"
             ],
             "zh": [
                 "支付平台手续费及商户资质认证",
                 "复杂运费/税务自动化（需单独报价）",
-                "大规模商品导入/ERP 同步（需单独报价）"
+                "大规模商品导入/ERP*** 同步（需单独报价）"
             ]
         },
         "ai_options": {
@@ -413,7 +413,7 @@ def build_dashboard_summary(lang: str) -> dict:
 
         ai_labels = []
         if site.get("ai_rfq"):
-            ai_labels.append("AI Smart RFQ" if lang == "en" else "AI 智能 RFQ")
+            ai_labels.append("AI Smart RFQ**" if lang == "en" else "AI 智能 RFQ**")
         if site.get("ai_chat"):
             ai_labels.append("AI Chat" if lang == "en" else "AI 在线咨询")
         s["ai_label_str"] = ", ".join(ai_labels) if ai_labels else ("None" if lang == "en" else "暂无")
@@ -478,6 +478,15 @@ ADDONS = [
             "zh": "访客可在网站发送消息（姓名/邮箱/内容）。商家可在后台仪表盘查看与回复（收件箱 + 对话线程）。",
         },
     },
+        {
+        "id": "addon_product_manager",
+        "name": {"en": "Product Manager Dashboard", "zh": "商品管理后台"},
+        "price": "450元",
+        "desc": {
+            "en": "Seller can add, edit, hide/remove products and update prices in a secure dashboard. Product data is stored in a database and updates sync to the storefront immediately (basic catalog management; no inventory/ERP).",
+            "zh": "商家可在安全后台新增/编辑/下架商品并修改价格。商品数据存入数据库，前台展示实时同步更新（基础商品目录管理，不含库存/ERP）。",
+        },
+    },
 ]
 
 
@@ -521,17 +530,17 @@ def get_support_policy(lang: str):
     lang = "zh" if (lang or "").lower().startswith("zh") else "en"
     if lang == "zh":
         return {
-            "hours": "工作时间：<br>周一-周三 09:00-12:00<br>周四-周五 09:00-18:00",
+            "hours": "周一-周三 09:00-12:00<br>周四-周五 09:00-18:00",
             "missed_calls": "未接来电：1 个工作日内回拨",
             "browsing": "支持手机端与电脑端访问",
-            "multi_lang": "多语言支持：<br>Starter 3 种语言<br>Business 5 种语言<br>Pro 10 种语言",
+            "multi_lang": "Starter 3 种语言<br>Business 5 种语言<br>Pro 10 种语言",
             "contact_email": "可选：展示公司邮箱（如 info@skylaneia.com）",
         }
     return {
-        "hours": "Working hours: <br>Mon–Wed 09:00–12:00; <br>Thu–Fri 09:00–18:00",
+        "hours": "Mon–Wed 09:00–12:00; <br>Thu–Fri 09:00–18:00",
         "missed_calls": "Missed calls: call back within 1 business day",
         "browsing": "Mobile and PC browsing supported",
-        "multi_lang": "Multi-language: \nStarter 3; \nBusiness 5; \nPro 10 languages",
+        "multi_lang": "Starter 3; <br>Business 5; <br>Pro 10 languages",
         "contact_email": "Optional: display your company email (e.g., info@skylaneia.com)",
     }
 
@@ -586,10 +595,10 @@ def localize_packages(lang: str):
 def build_smart_rfq_prompt(data: dict, lang: str) -> str:
     if lang == "zh":
         base_instructions = """
-你是一名外贸手工具/一般工业品的资深业务员，擅长把客户的原始需求整理成结构化的询盘/报价单（RFQ）。
+你是一名外贸手工具/一般工业品的资深业务员，擅长把客户的原始需求整理成结构化的询盘/报价单（RFQ**）。
 请根据下面信息，生成：
 
-1) 一份【英文】RFQ，结构清晰、适合发送给中国工厂或外贸公司的业务员；
+1) 一份【英文】RFQ**，结构清晰、适合发送给中国工厂或外贸公司的业务员；
 2) 一份【中文】版本，方便转发给工厂或内部团队。
 
 要求：
@@ -605,12 +614,12 @@ Your job is to turn a buyer's rough message into a clean, structured RFQ (reques
 
 Please produce:
 
-1) A clear ENGLISH RFQ suitable to send to Chinese factories or trading companies.
-2) A CHINESE version of the same RFQ for internal use or for factories.
+1) A clear ENGLISH RFQ** suitable to send to Chinese factories or trading companies.
+2) A CHINESE version of the same RFQ** for internal use or for factories.
 
 Requirements:
 - Use clear sections (e.g., Buyer info, Product spec, Quality, Packaging, Incoterms, QC, Others).
-- No email greetings (no “Dear Sir/Madam”); start directly with the RFQ sections.
+- No email greetings (no “Dear Sir/Madam”); start directly with the RFQ** sections.
 - You may reasonably fill in common missing details, marking them as “to be confirmed”.
 Return the result as JSON with two string fields: rfq_en and rfq_zh.
 """
