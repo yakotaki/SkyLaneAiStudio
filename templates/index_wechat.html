@@ -7,6 +7,38 @@
     <div class="text-secondary mb-2">
       {{ "支持手机与电脑端访问；支持中文/英文/多语言。" if lang=="zh" else "Mobile + PC ready. CN/EN/multi-language support." }}
     </div>
+
+
+    <div class="mb-2">
+      {% if lang == "zh" %}
+        手工艺人专用独立站：<span class="fw-semibold">窗花/饰品/手作</span>，一周上线，可直接接单。
+      {% else %}
+        A website for craft sellers: <span class="fw-semibold">paper-cut / handmade</span>, launch in 7 days and start taking orders.
+      {% endif %}
+    </div>
+
+    <a class="btn btn-outline-primary w-100 mb-3"
+       href="https://chuanghua.skylaneai.com/?lang={{ lang }}"
+       target="_blank" rel="noopener">
+      {{ "查看窗花演示站" if lang=="zh" else "View Chuanghua demo" }}
+    </a>
+
+    <div class="p-3 rounded-4 border bg-white mb-3">
+      <div class="fw-semibold mb-2">
+        {{ "为什么适合窗花/手作卖家" if lang=="zh" else "How this helps craft sellers" }}
+      </div>
+      <ul class="mb-0 small">
+        {% if lang=="zh" %}
+          <li>展示作品 → 自动收集订单与留言</li>
+          <li>后台改价/上新/下架，不用找开发</li>
+          <li>支持中英双语，面向海外客户</li>
+        {% else %}
+          <li>Show products → collect orders and messages</li>
+          <li>Update products in admin</li>
+          <li>CN/EN bilingual for overseas buyers</li>
+        {% endif %}
+      </ul>
+    </div>
     <div class="small">
       <div>{{ support_policy.hours }}</div>
       <div class="text-secondary">{{ support_policy.missed_calls }}</div>
@@ -65,7 +97,7 @@
     <div class="row g-3">
       {% for p in projects %}
       <div class="col-12">
-        <a class="d-block p-3 rounded-4 border bg-white text-decoration-none" href="{{ p.url }}" target="_blank">
+        <a class="d-block p-3 rounded-4 border bg-white text-decoration-none" href="{{ p.url }}" target="_blank" rel="noopener">
           <div class="fw-semibold">{{ p.name }}</div>
           <div class="text-secondary small">{{ p.desc }}</div>
         </a>

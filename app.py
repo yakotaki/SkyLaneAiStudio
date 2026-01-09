@@ -105,7 +105,18 @@ PROJECTS = [
         },
         "url": "https://shop.skylaneai.com/",
         "icon": "fa-cart-shopping"
-    }
+    },
+        {
+        "id": "chuanghua",
+        "title": "窗花手工艺小店 - Paper-cut Craft Shop",
+        "category": "Handmade / DTC",
+        "desc": {
+            "zh": "艺术窗花独立站演示：商品目录、购物车、下单、留言、后台管理（改价/上新/下架）。",
+            "en": "Artistic craft shop demo: catalog, cart, checkout, messages, and admin (price/update/hide)."
+        },
+        "url": "https://chuanghua.skylaneai.com/?lang=zh",
+        "icon": "fa-scissors"
+    },
 ]
 
 
