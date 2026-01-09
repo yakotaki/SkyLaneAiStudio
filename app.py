@@ -114,7 +114,7 @@ PROJECTS = [
             "zh": "艺术窗花独立站演示：商品目录、购物车、下单、留言、后台管理（改价/上新/下架）。",
             "en": "Artistic craft shop demo: catalog, cart, checkout, messages, and admin (price/update/hide)."
         },
-        "url": "https://chuanghua.skylaneai.com/?lang=zh",
+        "url": "https://chuanghua-shop.onrender.com/",
         "icon": "fa-scissors"
     },
 ]
